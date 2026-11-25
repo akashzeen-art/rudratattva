@@ -23,9 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local catalogue snapshot (too large for GitHub — keep on disk / regenerate via npm run export:catalog)
+# Full catalogue snapshot (too large for GitHub — keep on disk / regenerate via npm run export:catalog)
 public/data/local-catalog.json
 public/data/local-catalog.json.tmp
+public/data/catalog-lite.json
 public/data/product-details/
 public/data/.export-progress.json
 public/data/.backfill-progress.json
@@ -33,3 +34,4 @@ public/data/export-log.txt
 public/data/backfill-log.txt
 public/data/_sample-yellow-agate.json
 public/data/*.tmp
+# NOTE: public/data/pages/*.json + categories.json ARE committed (Vercel static catalogue)

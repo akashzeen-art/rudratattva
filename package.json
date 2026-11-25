@@ -8,6 +8,7 @@
     "api": "node server/index.js",
     "export:catalog": "node scripts/export-local-catalog.mjs",
     "backfill:products": "node scripts/backfill-product-details.mjs",
+    "build:catalog": "node scripts/build-static-catalog.mjs",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
