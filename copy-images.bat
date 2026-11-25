@@ -1,0 +1,86 @@
+@echo off
+
+set SRC=C:\Users\Pooja Jain\Desktop\astro website
+set DST=C:\Users\Pooja Jain\Desktop\rudra-centre\public\images
+
+rem Rudraksha
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\1-to-21-mukhi-nepal-rudraksha-category-thumbnail_206520.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\1-to-21-mukhi-java-indonesia-rudraksha-category-thumbnail_206519.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\rudraksha-ratna-chakra-therapy-category-thumbnail_206527.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\rudraksha-bracelet-category-thumbnail_206523.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\rudraksha-malas-and-kanthas-category-thumbnail.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\indrakshi-combinations-mala-and-bracelet-category-thumbnail_206521.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\siddha-combinations-mala-and-bracelet-category-thumbnail_206528.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\rudraksha-ratna-7-chakra-jewellery-category-thumbnail_206526.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\OM-Design-Round-Silver-s_218520.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\rudraksha-beading-tool-category-thumbnail_206522.jpg" "%DST%\rudraksha\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\logo.jpg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\credibility.svg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\fastest-delivery.svg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\expert-advise-and-counselling.svg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\worldwide-distribution-network.svg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\vedic-pooja-energization.svg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\testimonials.svg" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\gia.png" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\gjepc-india.png" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\international-gemological-institute.png" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\aigs.png" "%DST%\shared\"
+copy "%SRC%\Buy Original Rudraksha Online at Best Price _ Rudra Centre_files\footer-img-log.png" "%DST%\shared\"
+
+rem Gemstones
+copy "%SRC%\Online Gems Store_ Buy Loose Gemstones Online at Best Price_files\Gemstone-Category-thumbnail_227288.jpg" "%DST%\gemstones\"
+copy "%SRC%\Online Gems Store_ Buy Loose Gemstones Online at Best Price_files\Astral-Gems-Talismans-category-thumb_224031.jpg" "%DST%\gemstones\"
+copy "%SRC%\Online Gems Store_ Buy Loose Gemstones Online at Best Price_files\Natural-Gemstone-Bracelets_217362.jpg" "%DST%\gemstones\"
+copy "%SRC%\Online Gems Store_ Buy Loose Gemstones Online at Best Price_files\Natural-Gemstone-Necklaces-Mala_217362.jpg" "%DST%\gemstones\"
+copy "%SRC%\Online Gems Store_ Buy Loose Gemstones Online at Best Price_files\Gemstone-Earrings_217361.jpg" "%DST%\gemstones\"
+
+rem Yantra
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Golden-Sheet Yantra-S_218363.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Pocket-Yantras-S_218364.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Siddh-Meru Yantras-S_218365.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Silk-Yantras-S_218366.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Silver-Yantras_218367.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Kits-new-S_218368.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Sheets-S_218369.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Bhojpatra-Yantras-S_218370.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Desktop-Yantras_219077.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Gemstone-Yantras_219079.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Meru-Shree-Yantra_219081.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Wall-Hanging-yantras_219085.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Bracelets_219086.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Lockets_219090.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Gemstone-Meru-Shree-Yantra_219128.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Chowki_219124.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Kavach_219126.jpg" "%DST%\yantra\"
+copy "%SRC%\Explore All type of Yantra and Mahayantra _ Buy Online_files\Yantra-Rings_219127.jpg" "%DST%\yantra\"
+
+rem Idols
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\brass-new_110599.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\bronze-new_110600.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\gemstone-new_110602.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\ganesha-gemstone-Idols-new_110601.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\marble-new_110603.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\silver-new_110605.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\resin-fibre-and- -clay-idols-new_110604.jpg" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\ashtadhatu-idols-new_110598.png" "%DST%\idols\"
+copy "%SRC%\Buy Hindu God and Goddess Idols Online at Best Price_files\wooden-new_110606.jpg" "%DST%\idols\"
+
+rem Pujas
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\1---Maha-Pujas_88533.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\2---God-&-Goddess-Pujas_88534.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\6---Special-Celebration-Pujas_88538.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\7---Brahmin-Bhoj-and-Charity-Pujas_88539.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\11---Shraddh-Puja-and-Rituals_88553.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Chakra-Pujas-category-thumb_187118.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Daily-Puja-Category-thumb_236041.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Festival- Pujas_135321.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Gau-Cow-Puja-Seva-Donation_136111.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Guru-Pooja-Vidhanam-and-Gurudev-Homam_135032.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Mahaanushthan-category-thumb_215724.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Navgraha-Dosha-Nivaran-Pujas_135734.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Pran-Prathistha-Pujas-category-image_136110.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Pujas-in-Hindus-Temples-category-Thumbnail_135921.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Purpose-Wise-Pujas_136119.jpg" "%DST%\pujas\"
+copy "%SRC%\Online Puja Services by Rudra Centre _ Book Vedic Pujas Online_files\Ved-and-Scriptural-Pujas-category-image_223301.jpg" "%DST%\pujas\"
+
+echo All images copied successfully!

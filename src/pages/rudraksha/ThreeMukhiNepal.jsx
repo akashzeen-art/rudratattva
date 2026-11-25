@@ -1,0 +1,135 @@
+import RudrakshaListingPage from '../../components/RudrakshaListingPage'
+
+const products = [
+  { id:1, name:'3 Mukhi Nepali Rudraksha - Small', sku:'R03S', price:450, img:'/images/3-mukhi-nepal/R03S-S-new_108760.jpg', inStock:true },
+  { id:2, name:'3 Mukhi Nepali Rudraksha - Regular', sku:'R03', price:750, img:'/images/3-mukhi-nepal/R03-S-new_108759.jpg', inStock:true },
+  { id:3, name:'3 Mukhi Nepali Rudraksha - Large', sku:'R03L', price:950, img:'/images/3-mukhi-nepal/R03L-S-new_108758.jpg', inStock:true },
+  { id:4, name:'Collector 3 Mukhi Nepal - CDIV', sku:'CB03TW', price:2250, img:'/images/3-mukhi-nepal/K-34475-S_178739.jpg', inStock:false },
+  { id:5, name:'Collector 3 Mukhi from Nepal - CCCXC', sku:'CB03UY', price:2250, img:'/images/3-mukhi-nepal/K-34813-s_182468.jpg', inStock:false },
+  { id:6, name:'Collector 3 Mukhi from Nepal - CDXVI', sku:'CB03VL', price:2250, img:'/images/3-mukhi-nepal/K-34818-S1_184960.jpg', inStock:false },
+  { id:7, name:'Collector 3 Mukhi from Nepal - CDXX', sku:'CB03VP', price:2250, img:'/images/3-mukhi-nepal/K-34921-s_184992.jpg', inStock:false },
+  { id:8, name:'Collector 3 Mukhi from Nepal - CDXXIII', sku:'CB03VS', price:2250, img:'/images/3-mukhi-nepal/K-34924-s_184995.jpg', inStock:false },
+  { id:9, name:'Collector 3 Mukhi from Nepal - CDXXVI', sku:'CB03VV', price:2250, img:'/images/3-mukhi-nepal/K-34927-S_184998.jpg', inStock:false },
+  { id:10, name:'Collector 3 Mukhi from Nepal - CCCXCVII', sku:'CB03VE', price:2800, img:'/images/3-mukhi-nepal/K-34823-S1_183500.jpg', inStock:false },
+  { id:11, name:'Collector 3 Mukhi from Nepal - CDLXXIII', sku:'CB03XP', price:2800, img:'/images/3-mukhi-nepal/K-35492-S_195162.jpg', inStock:true },
+  { id:12, name:'Collector 3 Mukhi from Nepal - CDLI', sku:'CB03WU', price:2800, img:'/images/3-mukhi-nepal/K-35405-S_194472.jpg', inStock:true },
+  { id:13, name:'Collector 3 Mukhi from Nepal - CDLXVIII', sku:'CB03XL', price:2800, img:'/images/3-mukhi-nepal/K-35487-S_195158.jpg', inStock:false },
+  { id:14, name:'Collector 3 Mukhi from Nepal - CDLXXII', sku:'CB03XO', price:2800, img:'/images/3-mukhi-nepal/K-35491-S_196044.jpg', inStock:false },
+  { id:15, name:'Super Collector 3 Mukhi Nepal - CCLXIV', sku:'SCB03FN', price:3500, img:'/images/3-mukhi-nepal/K-36767-S1_217363.jpg', inStock:false },
+  { id:16, name:'Super Collector 3 Mukhi Nepal - CCLXV', sku:'SCB03FO', price:3500, img:'/images/3-mukhi-nepal/K-36768-S1_214326.jpg', inStock:false },
+  { id:17, name:'Super Collector 3 Mukhi Nepal - CCLXVI', sku:'SCB03FP', price:3500, img:'/images/3-mukhi-nepal/K-36769-S1_214327.jpg', inStock:false },
+  { id:18, name:'Super Collector 3 Mukhi Nepal - CCLXVII', sku:'SCB03FQ', price:3500, img:'/images/3-mukhi-nepal/K-36770-S1_214328.jpg', inStock:false },
+  { id:19, name:'Super Collector 3 Mukhi Nepal - CCLXVIII', sku:'SCB03FR', price:3500, img:'/images/3-mukhi-nepal/K-36771-S1_214329.jpg', inStock:false },
+  { id:20, name:'Super Collector 3 Mukhi Nepal - CCLXIX', sku:'SCB03FS', price:3500, img:'/images/3-mukhi-nepal/K-36772-S1_214330.jpg', inStock:false },
+  { id:21, name:'Super Collector 3 Mukhi Nepal - CCLXX', sku:'SCB03FT', price:3500, img:'/images/3-mukhi-nepal/K-36773-S1_214331.jpg', inStock:false },
+  { id:22, name:'Super Collector 3 Mukhi Nepal - CCLXXI', sku:'SCB03FU', price:3500, img:'/images/3-mukhi-nepal/K-36774-S1_214332.jpg', inStock:false },
+  { id:23, name:'Super Collector 3 Mukhi Nepal - CCLXXII', sku:'SCB03FV', price:3500, img:'/images/3-mukhi-nepal/K-36775-S1_214333.jpg', inStock:false },
+  { id:24, name:'Super Collector 3 Mukhi Nepal - CCLXXIII', sku:'SCB03FW', price:3500, img:'/images/3-mukhi-nepal/K-36776-S1_214334.jpg', inStock:false },
+  { id:25, name:'Super Collector 3 Mukhi Nepal - CCLXXVII', sku:'SCB03GA', price:3500, img:'/images/3-mukhi-nepal/K-36780-S1_214338.jpg', inStock:false },
+  { id:26, name:'Super Collector 3 Mukhi Nepal - CCLXXVIII', sku:'SCB03GB', price:4800, img:'/images/3-mukhi-nepal/K-36781-S1_214339.jpg', inStock:false },
+  { id:27, name:'Super Collector 3 Mukhi Nepal - CCLXXIX', sku:'SCB03GC', price:4800, img:'/images/3-mukhi-nepal/K-36782-S1_214340.jpg', inStock:false },
+  { id:28, name:'Super Collector 3 Mukhi Nepal - CCLXXX', sku:'SCB03GD', price:4800, img:'/images/3-mukhi-nepal/K-36783-S1_214341.jpg', inStock:false },
+  { id:29, name:'Super Collector 3 Mukhi Nepal - CCLXXXI', sku:'SCB03GE', price:4800, img:'/images/3-mukhi-nepal/K-36784-S_214342.jpg', inStock:false },
+  { id:30, name:'Super Collector 3 Mukhi Nepal - CCLXXXII', sku:'SCB03GF', price:4800, img:'/images/3-mukhi-nepal/K-36785-S_214343.jpg', inStock:false },
+  { id:31, name:'Super Collector 3 Mukhi Nepal - CCLXXXIII', sku:'SCB03GG', price:4800, img:'/images/3-mukhi-nepal/K-36786-S_214344.jpg', inStock:false },
+  { id:32, name:'Super Collector 3 Mukhi Nepal - CCLXXXIV', sku:'SCB03GH', price:4800, img:'/images/3-mukhi-nepal/K-36787-S_214345.jpg', inStock:false },
+  { id:33, name:'Super Collector 3 Mukhi Nepal - CCLXXXV', sku:'SCB03GI', price:4800, img:'/images/3-mukhi-nepal/K-36788-s_214346.jpg', inStock:false },
+  { id:34, name:'Super Collector 3 Mukhi Nepal - CCLXXXVI', sku:'SCB03GJ', price:4800, img:'/images/3-mukhi-nepal/K-36789-s_214347.jpg', inStock:false },
+  { id:35, name:'Super Collector 3 Mukhi Nepal - CCLXXXVII', sku:'SCB03GK', price:4800, img:'/images/3-mukhi-nepal/K-36790-s_214348.jpg', inStock:false },
+  { id:36, name:'Super Collector 3 Mukhi Nepal - CCLXXXVIII', sku:'SCB03GL', price:4800, img:'/images/3-mukhi-nepal/K-36791-s_214349.jpg', inStock:false },
+  { id:37, name:'Super Collector 3 Mukhi Nepal - CCLXXXIX', sku:'SCB03GM', price:4800, img:'/images/3-mukhi-nepal/K-36792-S_214733.jpg', inStock:false },
+  { id:38, name:'Super Collector 3 Mukhi Nepal - CCXC', sku:'SCB03GN', price:4800, img:'/images/3-mukhi-nepal/K-36793-S_214734.jpg', inStock:false },
+  { id:39, name:'Super Collector 3 Mukhi Nepal - CCXCI', sku:'SCB03GO', price:4800, img:'/images/3-mukhi-nepal/K-36794-S_214735.jpg', inStock:false },
+  { id:40, name:'Super Collector 3 Mukhi Nepal - CCXCII', sku:'SCB03GP', price:4800, img:'/images/3-mukhi-nepal/K-36795-S_214736.jpg', inStock:false },
+  { id:41, name:'Super Collector 3 Mukhi Nepal - CCXCIII', sku:'SCB03GQ', price:4800, img:'/images/3-mukhi-nepal/K-36796-S_214737.jpg', inStock:false },
+  { id:42, name:'Collector 3 Mukhi Nepal - CDXXVII', sku:'CB03VW', price:2250, img:'/images/3-mukhi-nepal/K-34928-S_184999.jpg', inStock:false },
+  { id:43, name:'Collector 3 Mukhi Nepal - CDXXVIII', sku:'CB03VX', price:2250, img:'/images/3-mukhi-nepal/K-34929-S_185000.jpg', inStock:false },
+  { id:44, name:'Collector 3 Mukhi Nepal - CDXXIX', sku:'CB03VY', price:2250, img:'/images/3-mukhi-nepal/K-34930-S_185001.jpg', inStock:false },
+  { id:45, name:'Collector 3 Mukhi Nepal - CDXXX', sku:'CB03VZ', price:2250, img:'/images/3-mukhi-nepal/K-34931-S1_186204.jpg', inStock:false },
+  { id:46, name:'Collector 3 Mukhi Nepal - CDXII', sku:'CB03WY', price:2250, img:'/images/3-mukhi-nepal/CB03WY_195121.jpg', inStock:false },
+  { id:47, name:'Collector 3 Mukhi Nepal - CDXIII', sku:'CB03WZ', price:2250, img:'/images/3-mukhi-nepal/K-35440-s_192262.jpg', inStock:false },
+  { id:48, name:'Collector 3 Mukhi Nepal - CDXIV', sku:'CB03XA', price:2250, img:'/images/3-mukhi-nepal/K-35395-S_192022.jpg', inStock:false },
+  { id:49, name:'Collector 3 Mukhi Nepal - CDXV', sku:'CB03XB', price:2250, img:'/images/3-mukhi-nepal/K-35396-S_192023.jpg', inStock:false },
+  { id:50, name:'Collector 3 Mukhi Nepal - CDXVII', sku:'CB03XC', price:2250, img:'/images/3-mukhi-nepal/K-35397-S1_192260.jpg', inStock:false },
+  { id:51, name:'Collector 3 Mukhi Nepal - CDXVIII', sku:'CB03XD', price:2250, img:'/images/3-mukhi-nepal/K-35398-S1_193688.jpg', inStock:false },
+  { id:52, name:'Collector 3 Mukhi Nepal - CDXIX', sku:'CB03XE', price:2250, img:'/images/3-mukhi-nepal/K-35399-S1_193689.jpg', inStock:false },
+  { id:53, name:'Collector 3 Mukhi Nepal - CDXX', sku:'CB03XF', price:2250, img:'/images/3-mukhi-nepal/K-35400-s_192060.jpg', inStock:false },
+  { id:54, name:'Collector 3 Mukhi Nepal - CDXXI', sku:'CB03XG', price:2250, img:'/images/3-mukhi-nepal/K-35401-S_192061.jpg', inStock:false },
+  { id:55, name:'Collector 3 Mukhi Nepal - CDXXII', sku:'CB03XH', price:2250, img:'/images/3-mukhi-nepal/K-35402-s_192062.jpg', inStock:false },
+  { id:56, name:'Collector 3 Mukhi Nepal - CDXXIII', sku:'CB03XI', price:2250, img:'/images/3-mukhi-nepal/K-35403-S_192063.jpg', inStock:false },
+  { id:57, name:'Collector 3 Mukhi Nepal - CDXXIV', sku:'CB03XJ', price:2250, img:'/images/3-mukhi-nepal/K-35404-S_192064.jpg', inStock:false },
+  { id:58, name:'Collector 3 Mukhi Nepal - CDXXV', sku:'CB03XK', price:2250, img:'/images/3-mukhi-nepal/K-35406-S_194473.jpg', inStock:false },
+  { id:59, name:'Collector 3 Mukhi Nepal - CDXXVI', sku:'CB03XM', price:2250, img:'/images/3-mukhi-nepal/K-35407-S_192065.jpg', inStock:false },
+  { id:60, name:'Collector 3 Mukhi Nepal - CDXXVII', sku:'CB03XN', price:2250, img:'/images/3-mukhi-nepal/K-35410-S_193690.jpg', inStock:false },
+  { id:61, name:'Collector 3 Mukhi Nepal - CDXXVIII', sku:'CB03XQ', price:2250, img:'/images/3-mukhi-nepal/K-35411-S_192067.jpg', inStock:false },
+  { id:62, name:'Collector 3 Mukhi Nepal - CDXXIX', sku:'CB03XR', price:2250, img:'/images/3-mukhi-nepal/K-35412-s_193691.jpg', inStock:false },
+  { id:63, name:'Collector 3 Mukhi Nepal - CDXXX', sku:'CB03XS', price:2250, img:'/images/3-mukhi-nepal/K-35413-S1_192068.jpg', inStock:false },
+  { id:64, name:'Collector 3 Mukhi Nepal - CDXXXI', sku:'CB03XT', price:2250, img:'/images/3-mukhi-nepal/K-35414-S1_192069.jpg', inStock:false },
+  { id:65, name:'Collector 3 Mukhi Nepal - CDXXXII', sku:'CB03XU', price:2250, img:'/images/3-mukhi-nepal/K-35415-S1_192070.jpg', inStock:false },
+  { id:66, name:'Collector 3 Mukhi Nepal - CDXXXIII', sku:'CB03XV', price:2250, img:'/images/3-mukhi-nepal/K-35416-S1_192071.jpg', inStock:false },
+  { id:67, name:'Collector 3 Mukhi Nepal - CDXXXIV', sku:'CB03XW', price:2250, img:'/images/3-mukhi-nepal/K-35417-S1_192072.jpg', inStock:false },
+  { id:68, name:'Collector 3 Mukhi Nepal - CDXXXV', sku:'CB03XX', price:2250, img:'/images/3-mukhi-nepal/K-35418-S1_192073.jpg', inStock:false },
+  { id:69, name:'Collector 3 Mukhi Nepal - CDXXXVI', sku:'CB03XY', price:2250, img:'/images/3-mukhi-nepal/K-35419-S1_192074.jpg', inStock:false },
+  { id:70, name:'Collector 3 Mukhi Nepal - CDXXXVII', sku:'CB03XZ', price:2250, img:'/images/3-mukhi-nepal/K-35420-S1_192075.jpg', inStock:false },
+  { id:71, name:'Collector 3 Mukhi Nepal - CDXXXVIII', sku:'CB03YA', price:2250, img:'/images/3-mukhi-nepal/K-35421-S1_192076.jpg', inStock:false },
+  { id:72, name:'Collector 3 Mukhi Nepal - CDXXXIX', sku:'CB03YB', price:2250, img:'/images/3-mukhi-nepal/K-35422-S1_192077.jpg', inStock:false },
+  { id:73, name:'Collector 3 Mukhi Nepal - CDXL', sku:'CB03YC', price:2250, img:'/images/3-mukhi-nepal/K-35431-S1_192081.jpg', inStock:false },
+  { id:74, name:'Collector 3 Mukhi Nepal - CDXLI', sku:'CB03YD', price:2250, img:'/images/3-mukhi-nepal/K-35433-S1_193693.jpg', inStock:false },
+  { id:75, name:'Collector 3 Mukhi Nepal - CDXLII', sku:'CB03YE', price:2250, img:'/images/3-mukhi-nepal/K-35434-S1_193694.jpg', inStock:false },
+  { id:76, name:'Collector 3 Mukhi Nepal - CDXLIII', sku:'CB03YF', price:2800, img:'/images/3-mukhi-nepal/K-34375-S_178760.jpg', inStock:false },
+  { id:77, name:'Collector 3 Mukhi Nepal - CDXLIV', sku:'CB03YG', price:2800, img:'/images/3-mukhi-nepal/K-34377-S_178895.jpg', inStock:false },
+  { id:78, name:'Collector 3 Mukhi Nepal - CDXLV', sku:'CB03YH', price:2800, img:'/images/3-mukhi-nepal/K-34807-S_187683.jpg', inStock:false },
+  { id:79, name:'Collector 3 Mukhi Nepal - CDXLVI', sku:'CB03YI', price:2800, img:'/images/3-mukhi-nepal/K-34809-s_182464.jpg', inStock:false },
+  { id:80, name:'Collector 3 Mukhi Nepal - CDXLVII', sku:'CB03YJ', price:2800, img:'/images/3-mukhi-nepal/K-34815-S1_184957.jpg', inStock:false },
+  { id:81, name:'Collector 3 Mukhi Nepal - CDXLVIII', sku:'CB03YK', price:2800, img:'/images/3-mukhi-nepal/K-34820-S1_182469.jpg', inStock:false },
+  { id:82, name:'Collector 3 Mukhi Nepal - CDXLIX', sku:'CB03YL', price:2800, img:'/images/3-mukhi-nepal/K-34821-S1_182470.jpg', inStock:false },
+  { id:83, name:'Collector 3 Mukhi Nepal - CDL', sku:'CB03YM', price:2800, img:'/images/3-mukhi-nepal/K-34825-S1_183502.jpg', inStock:false },
+  { id:84, name:'Collector 3 Mukhi Nepal - CDLI', sku:'CB03YN', price:2800, img:'/images/3-mukhi-nepal/K-34826-s_182471.jpg', inStock:false },
+  { id:85, name:'Collector 3 Mukhi Nepal - CDLII', sku:'CB03YO', price:2800, img:'/images/3-mukhi-nepal/K-34827-s_182472.jpg', inStock:false },
+  { id:86, name:'Collector 3 Mukhi Nepal - CDLIII', sku:'CB03YP', price:2800, img:'/images/3-mukhi-nepal/K-34912-S_186197.jpg', inStock:false },
+  { id:87, name:'Collector 3 Mukhi Nepal - CDLIV', sku:'CB03YQ', price:2800, img:'/images/3-mukhi-nepal/K-34913-S1_186198.jpg', inStock:false },
+  { id:88, name:'Collector 3 Mukhi Nepal - CDLV', sku:'CB03YR', price:2800, img:'/images/3-mukhi-nepal/K-34915-S1_186200.jpg', inStock:false },
+  { id:89, name:'Collector 3 Mukhi Nepal - CDLVI', sku:'CB03YS', price:2800, img:'/images/3-mukhi-nepal/K-34916-S1_186201.jpg', inStock:false },
+  { id:90, name:'Collector 3 Mukhi Nepal - CDLVII', sku:'CB03YT', price:2800, img:'/images/3-mukhi-nepal/K-34917-S1_186202.jpg', inStock:false },
+  { id:91, name:'Collector 3 Mukhi Nepal - CDLVIII', sku:'CB03YU', price:2800, img:'/images/3-mukhi-nepal/K-34918-S1_186203.jpg', inStock:false },
+  { id:92, name:'Collector 3 Mukhi Nepal - CDLIX', sku:'CB03YV', price:2800, img:'/images/3-mukhi-nepal/K-34920-s_184991.jpg', inStock:false },
+  { id:93, name:'Super Collector 3 Mukhi Nepal - CCLXXIV', sku:'SCB03FX', price:3500, img:'/images/3-mukhi-nepal/K-36777-S1_214335.jpg', inStock:false },
+  { id:94, name:'Super Collector 3 Mukhi Nepal - CCLXXV', sku:'SCB03FY', price:3500, img:'/images/3-mukhi-nepal/K-36778-S1_214336.jpg', inStock:false },
+  { id:95, name:'Super Collector 3 Mukhi Nepal - CCLXXVI', sku:'SCB03FZ', price:3500, img:'/images/3-mukhi-nepal/K-36779-S1_214337.jpg', inStock:false },
+]
+
+const mappedProducts = products.map(p => ({
+  ...p,
+  grade: p.sku?.startsWith('SCB') ? 'Super Collector' : p.sku?.startsWith('CB') ? 'Collector' : p.sku === 'R03L' ? 'Large' : p.sku === 'R03S' ? 'Small' : 'Regular',
+  beadSize: p.sku?.startsWith('SCB') ? '28-35 mm' : p.sku?.startsWith('CB') ? '22-28 mm' : p.sku === 'R03L' ? '22 mm' : p.sku === 'R03S' ? '14 mm' : '18 mm',
+}))
+
+const keyFacts = [
+  'Ruling Deity: Agni Dev (God of Fire)',
+  'Ruling Planet: Sun (Surya)',
+  'Nepal Bead Size: 14–35 mm',
+  'Favorable Day: Sunday',
+  'Beej Mantra: Om Kleem Namah',
+  'Other Mantras: Om Namah Shivay',
+]
+
+const faqs = [
+  { q: 'What is 3 Mukhi Rudraksha?', a: '3 Mukhi Rudraksha is ruled by Agni Dev, the God of Fire. It represents the Trinity of Brahma, Vishnu and Mahesh. This bead burns past karma from all past lives as well as from the present life.' },
+  { q: 'What are the benefits of 3 Mukhi Rudraksha?', a: 'It frees the wearer from the cycle of birth and death, removes sins of past lives, boosts self-confidence, removes laziness and depression, and is excellent for those suffering from inferiority complex.' },
+  { q: 'What is the price of 3 Mukhi Nepal Rudraksha?', a: '3 Mukhi Nepal Rudraksha price ranges from ₹450 (Small) to ₹6,500+ (Super Collector) depending on size and quality.' },
+  { q: 'Who should wear 3 Mukhi Rudraksha?', a: 'It is recommended for people suffering from depression, low self-esteem, guilt, or those who want to free themselves from the burden of past karma.' },
+  { q: 'Which planet does 3 Mukhi Rudraksha represent?', a: '3 Mukhi Rudraksha is associated with the Sun (Surya). It helps remove the malefic effects of the Sun in the horoscope.' },
+]
+
+export default function ThreeMukhiNepal() {
+  return (
+    <RudrakshaListingPage
+      title="3 Mukhi (Face) Nepali Rudraksha"
+      breadcrumb="3 Mukhi Nepal"
+      description="The 3 Mukhi Rudraksha is ruled by Agni Dev, the God of Fire. This bead burns past karma from all past lives as well as from the present life. It represents the Trinity of Brahma, Vishnu and Mahesh. Available in Small, Regular, Large, Collector and Super Collector sizes."
+      products={mappedProducts}
+      keyFacts={keyFacts}
+      faqs={faqs}
+    />
+  )
+}

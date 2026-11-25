@@ -1,0 +1,35 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local catalogue snapshot (too large for GitHub — keep on disk / regenerate via npm run export:catalog)
+public/data/local-catalog.json
+public/data/local-catalog.json.tmp
+public/data/product-details/
+public/data/.export-progress.json
+public/data/.backfill-progress.json
+public/data/export-log.txt
+public/data/backfill-log.txt
+public/data/_sample-yellow-agate.json
+public/data/*.tmp
