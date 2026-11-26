@@ -5,6 +5,7 @@ import {
   getGemstoneDisplayForProduct,
   stripGemstoneCaratCopy,
 } from '../data/gemstoneBuy'
+import { getYantraProductImage } from '../data/yantraProductImages'
 
 const MAIN_NAV = {
   1: { label: 'Pujas', to: '/pujas' },
@@ -287,14 +288,26 @@ export async function loadProductPage(slugValue) {
         ? stripGemstoneCaratCopy(rawProductName) || rawProductName
         : rawProductName
   )
+  const yantraLocalImg = getYantraProductImage(productSlug)
   let images = gemDisplay?.img
     ? [{ src: gemDisplay.img, alt: productName }]
     : regularParent?.img?.startsWith('/image/')
       ? [{ src: regularParent.img, alt: productName }]
-      : mapImages(d.image_url, productName)
+      : yantraLocalImg
+        ? [{ src: yantraLocalImg, alt: productName }]
+        : mapImages(d.image_url, productName)
   // Prefer local rudraksha folder assets over remote CDN on product / cart thumbs
   if (!gemDisplay && regularParent?.img?.startsWith('/image/') && images.length) {
     images = [{ src: regularParent.img, alt: productName }, ...images.filter((img) => img.src !== regularParent.img)]
+  }
+  // Prefer local yantra sheet / siddh meru assets over legacy CDN galleries
+  if (!gemDisplay && !regularParent && yantraLocalImg) {
+    images = [
+      { src: yantraLocalImg, alt: productName },
+      ...mapImages(d.image_url, productName).filter(
+        (img) => img.src !== yantraLocalImg && !isRemoteCdnSrc(img.src),
+      ),
+    ]
   }
   if (!images.length) {
     images = [{ src: '/images/gems-and-jewels-logo.png', alt: 'Gems & Jewels' }]
@@ -302,7 +315,13 @@ export async function loadProductPage(slugValue) {
 
   const variants = collapseFinishVariants(
     asArray(d.product_variant_data).map(item => {
-      const vImages = mapImages(item.image_url, productName)
+      let vImages = mapImages(item.image_url, productName)
+      if (yantraLocalImg) {
+        vImages = [
+          { src: yantraLocalImg, alt: productName },
+          ...vImages.filter((img) => img.src !== yantraLocalImg && !isRemoteCdnSrc(img.src)),
+        ]
+      }
       const variantPrice = parsePrice(item.display_price ?? item.selling_price ?? item.price)
       const typeName = String(item.variant_type_name || 'Variation')
         .replace(/size[-\s]?finish/i, 'Size')

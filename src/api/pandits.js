@@ -1,4 +1,7 @@
-const ASTRO_BASE = import.meta.env.VITE_ASTRO_API_BASE || '/astro-api/'
+// Always hit the live astrology API (Vercel has no /astro-api proxy).
+const ASTRO_BASE =
+  import.meta.env.VITE_ASTRO_API_BASE
+  || 'https://myastrosutra.online/api/'
 
 function splitList(value = '') {
   return String(value)

@@ -11,6 +11,7 @@ import {
   mapRudrakshaSectionImages,
 } from '../data/rudrakshaRegular'
 import { mapYantraSectionImages } from '../data/yantraImages'
+import { getYantraProductImage } from '../data/yantraProductImages'
 import {
   getGemstoneBuyRedirect,
   mapGemstoneChildrenToBuy,
@@ -528,13 +529,26 @@ function applyLocalFilters(products = [], filters = {}) {
 function normalizeLocalProduct(item) {
   if (!item) return null
   if (item.to || item.sku != null || item.priceLabel != null) {
+    const slug = String(item.slug || item.to || '')
+      .replace(/^\//, '')
+      .trim()
+    const localYantra = getYantraProductImage(slug)
     return {
       ...item,
       name: brandify(item.name || 'Product'),
       to: item.to?.startsWith('/') ? item.to : item.slug ? `/${item.slug}` : item.to || '#',
+      img: localYantra || item.img || item.image || '/images/shared/logo.jpg',
+      image: localYantra || item.image || item.img || '/images/shared/logo.jpg',
     }
   }
-  return mapProduct(item)
+  const mapped = mapProduct(item)
+  const slug = String(mapped.to || '').replace(/^\//, '')
+  const localYantra = getYantraProductImage(slug)
+  if (localYantra) {
+    mapped.img = localYantra
+    mapped.image = localYantra
+  }
+  return mapped
 }
 
 /**
