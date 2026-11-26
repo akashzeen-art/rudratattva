@@ -7,9 +7,9 @@ export default function AboutUs() {
         <p className="breadcrumb">Home &gt; <span>About Us</span></p>
         <h1>About Us</h1>
         <p>
-          Rudra Tattva was founded in the year 1997 in Mumbai, MH. India. It commands more than 25 years of
+          Gems & Jewels was founded in the year 1997 in Mumbai, MH. India. It commands more than 25 years of
           Excellence at the Forefront of Rudraksha and Spiritual Products &amp; Services Worldwide’s Distribution.
-          Rudra Tattva is wholly owned and operated by Forte Digital Solutions LLP.
+          Gems & Jewels is wholly owned and operated by Forte Digital Solutions LLP.
         </p>
       </div>
 
@@ -32,12 +32,12 @@ export default function AboutUs() {
 
         <h2>Our Credentials</h2>
         <p>
-          Rudra Tattva has developed into a One-Stop shop for Spiritual Products, Spiritual Services, and Holistic Healing on the internet.
+          Gems & Jewels has developed into a One-Stop shop for Spiritual Products, Spiritual Services, and Holistic Healing on the internet.
           We sell authentic and high-quality Rudraksha, Gemstones, Parad, Yantra, Murtis of Gods and Goddesses, Puja and Meditation accessories, and Spiritual Books.
           Additionally, we offer Holistic Healing services including personal counselling with chakra analysis and RRCT solutions, Vastu consultation and personalized online Puja services.
         </p>
         <p>
-          Rudra Tattva is the first Rudraksha website in the world that came online in the year 1997 and is the world&apos;s first Rudraksha organization to be certified to ISO 9001:2015.
+          Gems & Jewels is the first Rudraksha website in the world that came online in the year 1997 and is the world&apos;s first Rudraksha organization to be certified to ISO 9001:2015.
         </p>
 
         <h2>Rudraksha Ratna Chakra Therapy ® (RRCT)</h2>

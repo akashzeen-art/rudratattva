@@ -8,7 +8,7 @@ export default function Gemstones() {
   return (
     <PageLayout
       title="Gemstones"
-      description="Explore our exquisite collection of natural, lab-tested, certified gemstones at Rudra Tattva. Each gemstone is carefully selected for its quality, authenticity, and astrological benefits."
+      description="Explore our exquisite collection of natural, lab-tested, certified gemstones at Gems & Jewels. Each gemstone is carefully selected for its quality, authenticity, and astrological benefits."
     >
       {products.map(p => (
         <Link to={p.to} className="product-card" key={p.to}>

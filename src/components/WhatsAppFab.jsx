@@ -1,5 +1,5 @@
 const WA = '918929728030'
-const MSG = encodeURIComponent('Namaste. I would like to enquire with Rudra Tattva.')
+const MSG = encodeURIComponent('Namaste. I would like to enquire with Gems & Jewels.')
 
 export default function WhatsAppFab() {
   return (

@@ -2,6 +2,17 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { fetchRemoteProduct, isCompleteProduct } from './productFetch.js'
+import {
+  filterCatalogChildren,
+  filterCatalogProducts,
+  collectFlattenedIdolProducts,
+  FLATTEN_IDOL_TO_PRODUCTS_SLUGS,
+} from '../src/data/catalogFilters.js'
+import {
+  mapRudrakshaChildrenToRegular,
+  mapRudrakshaSectionImages,
+} from '../src/data/rudrakshaRegular.js'
+import { mapYantraSectionImages } from '../src/data/yantraImages.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -34,8 +45,14 @@ function mergeDetailFiles(data) {
       const slug = String(parsed?.info?.slug_value || parsed?.raw?.slug_value || '')
         .replace(/^\//, '')
       if (!slug || !parsed?.raw) continue
-      // Prefer complete detail files over incomplete catalog entries
-      if (!isCompleteProduct(data.products[slug])) {
+      // Prefer on-disk product-details (local image overlays) over bundled catalog stubs
+      if (isCompleteProduct(parsed)) {
+        data.products[slug] = {
+          info: parsed.info || { level: 4, mainprodtype: parsed.raw.mainprodtype, slug_value: slug },
+          raw: parsed.raw,
+          synthesized: false,
+        }
+      } else if (!isCompleteProduct(data.products[slug])) {
         data.products[slug] = {
           info: parsed.info || { level: 4, mainprodtype: parsed.raw.mainprodtype, slug_value: slug },
           raw: parsed.raw,
@@ -229,11 +246,8 @@ export function findListingProducts(slugValue = '') {
 export function findProduct(slugValue = '') {
   const data = loadCatalog()
   const slug = String(slugValue || '').replace(/^\//, '')
-  if (data.products?.[slug] && isCompleteProduct(data.products[slug])) {
-    return data.products[slug]
-  }
 
-  // Disk overlay (lazy-copied full details)
+  // Disk product-details win (local /image/idol overlays are stored here)
   try {
     const file = detailFilePath(slug)
     if (fs.existsSync(file)) {
@@ -250,6 +264,10 @@ export function findProduct(slugValue = '') {
     }
   } catch {
     /* fall through */
+  }
+
+  if (data.products?.[slug] && isCompleteProduct(data.products[slug])) {
+    return data.products[slug]
   }
 
   if (data.products?.[slug]) return data.products[slug]
@@ -362,13 +380,31 @@ export function getPageBundle(slugValue = '', pageNo = 1, pageSize = 12, filters
   const category = findCategory(slug)
   if (!page && !category) return null
 
-  const mode = page?.mode || (category?.children?.length ? 'categories' : 'products')
-  const allProducts = mode === 'products'
-    ? applyFilters(
-        (page?.products?.length ? page.products : findListingProducts(slug)) || [],
-        filters
-      )
-    : []
+  let mode = page?.mode || (category?.children?.length ? 'categories' : 'products')
+  const mainprodtype = Number(page?.mainprodtype || category?.mainprodtype || 5)
+
+  const flattened = collectFlattenedIdolProducts(slug, loadCatalog().pages || {})
+  if (FLATTEN_IDOL_TO_PRODUCTS_SLUGS.has(slug) || (flattened && flattened.length)) {
+    mode = 'products'
+  }
+
+  let sourceProducts = filterCatalogProducts(
+    (flattened?.length
+      ? flattened
+      : (page?.products?.length ? page.products : findListingProducts(slug))) || [],
+    slug,
+    mainprodtype
+  )
+  let sourceChildren = filterCatalogChildren(
+    page?.children || category?.children || [],
+    slug,
+    mainprodtype
+  )
+  sourceChildren = mapRudrakshaSectionImages(sourceChildren, slug)
+  sourceChildren = mapYantraSectionImages(sourceChildren, slug)
+  sourceChildren = mapRudrakshaChildrenToRegular(sourceChildren, slug)
+
+  const allProducts = mode === 'products' ? applyFilters(sourceProducts, filters) : []
 
   const size = Math.max(1, Number(pageSize) || 12)
   const pageNum = Math.max(1, Number(pageNo) || 1)
@@ -391,10 +427,10 @@ export function getPageBundle(slugValue = '', pageNo = 1, pageSize = 12, filters
   return {
     page: {
       mode,
-      mainprodtype: Number(page?.mainprodtype || category?.mainprodtype || 5),
+      mainprodtype,
       level: Number(page?.level || category?.level || 2),
       intro,
-      children: mode === 'categories' ? (page?.children || category?.children || []) : [],
+      children: mode === 'categories' ? sourceChildren : [],
       products: slice,
       total: allProducts.length,
       pageNo: pageNum,
@@ -409,7 +445,7 @@ export function getPageBundle(slugValue = '', pageNo = 1, pageSize = 12, filters
           image: category.image || '',
           mainprodtype: category.mainprodtype,
           level: category.level,
-          children: mode === 'categories' ? (category.children || []) : undefined,
+          children: mode === 'categories' ? sourceChildren : undefined,
         }
       : null,
   }

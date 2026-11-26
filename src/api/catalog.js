@@ -1,5 +1,20 @@
-// Catalogue via our local Rudra Tattva API (copied snapshot — no remote admin).
+// Catalogue via our local Gems & Jewels API (copied snapshot — no remote admin).
 import { fetchPageBundle, fetchSlugInfo } from './localStore'
+import {
+  filterCatalogChildren,
+  filterCatalogProducts,
+  FLATTEN_IDOL_TO_PRODUCTS_SLUGS,
+} from '../data/catalogFilters'
+import {
+  getRegularRedirect,
+  mapRudrakshaChildrenToRegular,
+  mapRudrakshaSectionImages,
+} from '../data/rudrakshaRegular'
+import { mapYantraSectionImages } from '../data/yantraImages'
+import {
+  getGemstoneBuyRedirect,
+  mapGemstoneChildrenToBuy,
+} from '../data/gemstoneBuy'
 
 const MAIN_TYPE = {
   1: 'puja',
@@ -11,7 +26,7 @@ const MAIN_TYPE = {
 
 const MAIN_NAV = {
   1: { label: 'Pujas', to: '/pujas' },
-  2: { label: 'Gemstones', to: '/gemstones' },
+  2: { label: 'Gemstones', to: '/p/natural-jyotish-gemstones' },
   3: { label: 'Rudraksha', to: '/rudraksha' },
   4: { label: 'Yantras', to: '/yantra' },
   5: { label: 'Idols', to: '/idols' },
@@ -135,15 +150,13 @@ function productPayload(slugValue, mainType, pageNo = 1, filters = {}) {
   return base
 }
 
-const RUDRAKSHA_GRADES = ['Small', 'Regular', 'Large', 'Collector']
-
 function mapFilterMeta(constant, mainType) {
   if (!constant || typeof constant !== 'object') {
     return {
       mainType,
       price: null,
       beadSize: null,
-      sizeGrades: mainType === 'rudraksha' ? [...RUDRAKSHA_GRADES] : [],
+      sizeGrades: [],
       carat: null,
       origins: [],
       shapes: [],
@@ -157,10 +170,6 @@ function mapFilterMeta(constant, mainType) {
 
   const priceMin = num(constant.minprice)
   const priceMax = num(constant.maxprice)
-  const beadMin = num(constant.minbeadsize)
-  const beadMax = num(constant.maxbeadsize)
-  const caratMin = num(constant.mincaratweight)
-  const caratMax = num(constant.maxcaratweight)
 
   const origins = Array.isArray(constant.originlist)
     ? constant.originlist.map(o => (typeof o === 'string' ? o : o?.name || o?.origin || '')).filter(Boolean)
@@ -172,9 +181,10 @@ function mapFilterMeta(constant, mainType) {
   return {
     mainType,
     price: priceMin != null && priceMax != null ? { min: priceMin, max: priceMax } : null,
-    beadSize: beadMin != null && beadMax != null ? { min: beadMin, max: beadMax } : null,
-    sizeGrades: mainType === 'rudraksha' ? [...RUDRAKSHA_GRADES] : [],
-    carat: caratMin != null && caratMax != null ? { min: caratMin, max: caratMax } : null,
+    // Bead size / size grade / carat filters removed site-wide
+    beadSize: null,
+    sizeGrades: [],
+    carat: null,
     origins,
     shapes,
   }
@@ -194,7 +204,7 @@ export function mapLegacyPath(rawPath = '/') {
   if (/^\/contact(-us)?$/i.test(clean)) return '/contact-us'
   if (/^\/consultation(\/|$)/i.test(clean)) return '/consultation'
   if (/^\/rudraksha(\/|$)/i.test(clean)) return clean === '/rudraksha' ? '/rudraksha' : clean.replace(/^\/rudraksha/i, '/rudraksha')
-  if (/^\/gemstones?(\/|$)/i.test(clean)) return '/gemstones'
+  if (/^\/gemstones?(\/|$)/i.test(clean)) return '/p/natural-jyotish-gemstones'
   if (/^\/yantras?(\/|$)/i.test(clean)) return '/yantra'
   if (/^\/idols?(\/|$)/i.test(clean)) return '/idols'
   if (/^\/pujas?(\/|$)/i.test(clean)) return '/pujas'
@@ -204,7 +214,7 @@ export function mapLegacyPath(rawPath = '/') {
     if (!slug) return '/'
     if (/yantra/.test(slug)) return '/yantra'
     if (/rudraksha/.test(slug)) return '/rudraksha'
-    if (/gem/.test(slug)) return '/gemstones'
+    if (/gem/.test(slug)) return '/p/natural-jyotish-gemstones'
     if (/puja|pooja/.test(slug)) return '/pujas'
     if (/idol|murti|god|goddess|deity|shiva|vishnu|ganesh|laxmi|lakshmi|durga|kali|hanuman|krishna|rama/.test(slug)) {
       return '/idols'
@@ -282,14 +292,36 @@ export function rewriteLegacyUrls(text = '') {
   return out
 }
 
+/** Drop legacy CMS “Read more” links that point nowhere useful on this site. */
+function stripReadMore(html = '') {
+  return String(html || '')
+    .replace(/<a\b[^>]*>[\s\S]*?read\s*more[\s\S]*?<\/a>/gi, '')
+    .replace(/(?:<br\s*\/?>|\s)*read\s*more(?:\s*<br\s*\/?>)?/gi, '')
+}
+
+/** Drop “Click to see video of …” CTAs (and their video links) from CMS copy. */
+function stripVideoCta(html = '') {
+  return String(html || '')
+    .replace(
+      /(?:<br\s*\/?>|\s|&nbsp;)*click\s+to\s+see\s+video\s+of\s*(?:<a\b[^>]*>[\s\S]*?<\/a>)?/gi,
+      '',
+    )
+    .replace(/(?:<br\s*\/?>|\s|&nbsp;)*click\s+to\s+see\s+video(?:\s+of)?(?:\s*<br\s*\/?>)?/gi, '')
+}
+
 /** Replace legacy brand names + outbound legacy-site links in API / CMS copy. */
 export function brandify(text = '') {
   return rewriteLegacyUrls(
     stripYoutube(
-      String(text)
-        .replace(/Rudra\s*Centre/gi, 'Rudra Tattva')
-        .replace(/Rudra\s*Center/gi, 'Rudra Tattva')
-        .replace(/Rudraksha\s*Ratna(?!\s*Chakra)/gi, 'Rudra Tattva')
+      stripVideoCta(
+        stripReadMore(
+          String(text)
+            .replace(/Rudra\s*Tattva/gi, 'Gems & Jewels')
+            .replace(/Rudra\s*Centre/gi, 'Gems & Jewels')
+            .replace(/Rudra\s*Center/gi, 'Gems & Jewels')
+            .replace(/Rudraksha\s*Ratna(?!\s*Chakra)/gi, 'Gems & Jewels')
+        )
+      )
     )
   )
 }
@@ -351,8 +383,8 @@ function mapProduct(item) {
     img: item.image || '/images/shared/logo.jpg',
     price,
     priceLabel: formatListingPrice(priceRaw),
-    beadSize: item.bead_size || '',
-    grade: item.size_grade || '',
+    beadSize: '',
+    grade: '',
     inStock: !(item.out_of_stock === true),
     to: slug,
   }
@@ -371,7 +403,7 @@ function mapIntro(intro, fallbackTitle) {
   if (!intro) {
     return {
       title: fallbackTitle,
-      description: `Explore authentic ${fallbackTitle} from Rudra Tattva.`,
+      description: `Explore authentic ${fallbackTitle} from Gems & Jewels.`,
       tabs: null,
       faqs: [],
       breadcrumbs: [],
@@ -382,7 +414,11 @@ function mapIntro(intro, fallbackTitle) {
     ? [1, 2, 3, 4, 5].map(n => ({
         heading: brandify(intro.tabs[`tab${n}_heading`] || '').trim(),
         html: stripLeadingEmptyHtml(brandify(intro.tabs[`tab${n}_description`] || '')),
-      })).filter(t => t.heading && stripHtml(t.html))
+      })).filter(t =>
+        t.heading
+        && stripHtml(t.html)
+        && !/size\s*grade|bead\s*size|carat|dimension|ratti|size\s*guide/i.test(t.heading)
+      )
     : null
 
   const faqs = Array.isArray(intro.faqs)
@@ -399,7 +435,7 @@ function mapIntro(intro, fallbackTitle) {
 
   const firstNavTo = (slug = '') => {
     if (slug.includes('rudraksha')) return '/rudraksha'
-    if (slug.includes('gemstone') || slug.includes('jyotish') || slug.includes('ratna-vedic')) return '/gemstones'
+    if (slug.includes('gemstone') || slug.includes('jyotish') || slug.includes('ratna-vedic')) return '/p/natural-jyotish-gemstones'
     if (slug.includes('yantra')) return '/yantra'
     if (slug.includes('idol') || slug.includes('god')) return '/idols'
     if (slug.includes('puja')) return '/pujas'
@@ -443,7 +479,7 @@ function mapIntro(intro, fallbackTitle) {
 
   return {
     title: brandify(intro.mainheadingtext || intro.name || fallbackTitle),
-    description: stripHtml(intro.intro_content) || `Explore authentic ${fallbackTitle} from Rudra Tattva.`,
+    description: stripHtml(intro.intro_content) || `Explore authentic ${fallbackTitle} from Gems & Jewels.`,
     descriptionHtml: stripLeadingEmptyHtml(brandify(intro.intro_content || '')),
     tabs,
     faqs,
@@ -506,6 +542,59 @@ function normalizeLocalProduct(item) {
  */
 export async function loadCatalogPage(slugValue, pageNo = 1, filters = {}) {
   const slug = String(slugValue || '').replace(/^\//, '')
+
+  const regular = getRegularRedirect(slug)
+  if (regular?.productSlug) {
+    return {
+      redirectTo: `/${regular.productSlug}`,
+      mode: 'redirect',
+      mainType: 'rudraksha',
+      mainprodtype: 3,
+      level: 3,
+      intro: {
+        title: regular.productLabel,
+        description: '',
+        descriptionHtml: '',
+        tabs: null,
+        faqs: [],
+        breadcrumbs: [],
+        bannerImage: '',
+      },
+      products: [],
+      children: [],
+      total: 0,
+      pageNo: 1,
+      hasMore: false,
+      filterMeta: null,
+    }
+  }
+
+  const gemBuy = getGemstoneBuyRedirect(slug)
+  if (gemBuy?.productSlug) {
+    return {
+      redirectTo: `/${gemBuy.productSlug}`,
+      mode: 'redirect',
+      mainType: 'gemstone',
+      mainprodtype: 2,
+      level: 3,
+      intro: {
+        title: gemBuy.productLabel,
+        description: '',
+        descriptionHtml: '',
+        tabs: null,
+        faqs: [],
+        breadcrumbs: [],
+        bannerImage: gemBuy.img || '',
+      },
+      products: [],
+      children: [],
+      total: 0,
+      pageNo: 1,
+      hasMore: false,
+      filterMeta: null,
+    }
+  }
+
   const bundle = await fetchPageBundle(slug, pageNo, filters)
   const page = bundle?.page
   const cat = bundle?.category
@@ -514,9 +603,11 @@ export async function loadCatalogPage(slugValue, pageNo = 1, filters = {}) {
     throw new Error('Slug not found')
   }
 
-  const mode = page?.mode
+  let mode = page?.mode
     || (cat?.children?.length ? 'categories' : 'products')
   const mainprodtype = Number(page?.mainprodtype || cat?.mainprodtype || 5)
+  // Brass Idols: show priced products, not deity sub-category cards
+  if (FLATTEN_IDOL_TO_PRODUCTS_SLUGS.has(slug)) mode = 'products'
   const level = Number(page?.level || cat?.level || 2)
   const mainType = MAIN_TYPE[mainprodtype] || 'other'
   const fallbackTitle = slug.split('/').pop()?.replace(/-/g, ' ') || 'Catalogue'
@@ -526,7 +617,7 @@ export async function loadCatalogPage(slugValue, pageNo = 1, filters = {}) {
     : {
         title: brandify(page?.intro?.title || cat?.name || fallbackTitle),
         description: page?.intro?.description
-          || `Explore authentic ${brandify(cat?.name || fallbackTitle)} from Rudra Tattva.`,
+          || `Explore authentic ${brandify(cat?.name || fallbackTitle)} from Gems & Jewels.`,
         descriptionHtml: stripLeadingEmptyHtml(brandify(page?.intro?.descriptionHtml || '')),
         tabs: page?.intro?.tabs || null,
         faqs: page?.intro?.faqs || [],
@@ -536,17 +627,25 @@ export async function loadCatalogPage(slugValue, pageNo = 1, filters = {}) {
         bannerImage: page?.intro?.bannerImage || cat?.image || '',
       }
 
-  const children = mode === 'categories'
+  let children = mode === 'categories'
     ? (page?.children || cat?.children || []).map(c => ({
         label: brandify(c.label || c.name || 'Category'),
         to: c.to?.startsWith('/') ? c.to : `/${String(c.slug || c.to || '').replace(/^\//, '')}`,
         img: c.img || c.image || '/images/shared/logo.jpg',
+        slug: String(c.slug || c.to || '').replace(/^\//, ''),
       }))
     : []
 
-  const products = mode === 'products'
+  let products = mode === 'products'
     ? (page?.products || []).map(normalizeLocalProduct).filter(Boolean)
     : []
+
+  children = filterCatalogChildren(children, slug, mainprodtype)
+  children = mapRudrakshaSectionImages(children, slug)
+  children = mapYantraSectionImages(children, slug)
+  children = mapRudrakshaChildrenToRegular(children, slug)
+  children = mapGemstoneChildrenToBuy(children, slug)
+  products = filterCatalogProducts(products, slug, mainprodtype)
 
   return {
     mode,
@@ -556,7 +655,9 @@ export async function loadCatalogPage(slugValue, pageNo = 1, filters = {}) {
     intro,
     products,
     children,
-    total: Number(page?.total) || products.length,
+    total: mode === 'categories'
+      ? children.length
+      : (Number(page?.total) || products.length),
     pageNo: Number(page?.pageNo || pageNo) || 1,
     hasMore: Boolean(page?.hasMore),
     filterMeta: mode === 'products' ? mapFilterMeta(page?.constant || null, mainType) : null,

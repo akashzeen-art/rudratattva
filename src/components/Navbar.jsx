@@ -98,8 +98,8 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="nav-middle">
         <NavLink to="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
-          <img src="/images/RudraTattvalogo.png" alt="Rudra Tattva" className="logo-desk" />
-          <img src="/images/RudraTattvalogo.png" alt="Rudra Tattva" className="logo-mob" />
+          <img src="/images/gems-and-jewels-logo.png" alt="Gems & Jewels" className="logo-desk" />
+          <img src="/images/gems-and-jewels-logo.png" alt="Gems & Jewels" className="logo-mob" />
         </NavLink>
 
         <div className={`nav-search${searchOpen ? ' open' : ''}`}>

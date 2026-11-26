@@ -13,7 +13,7 @@ export default function Vastu() {
   return (
     <PageLayout
       title="Chakra Vastu"
-      description="Balance the elements, colours, directions, cuts and corners of your home or workplace. Explore Parad, Shaligrams, Narmada Shivlings, Vastu Yantras and remedial products from Rudra Tattva."
+      description="Balance the elements, colours, directions, cuts and corners of your home or workplace. Explore Parad, Shaligrams, Narmada Shivlings, Vastu Yantras and remedial products from Gems & Jewels."
     >
       {products.map(p => (
         <div className="product-card" key={p.name}>

@@ -20,12 +20,12 @@ export default function SubcategoryPage({ title, parent, parentTo, img, descript
         <h1>{title}</h1>
         <p>
           {description ||
-            `Explore our authentic collection of ${title} at Rudra Tattva. All products are carefully selected, quality-checked and energized as per Vedic traditions before dispatch.`}
+            `Explore our authentic collection of ${title} at Gems & Jewels. All products are carefully selected, quality-checked and energized as per Vedic traditions before dispatch.`}
         </p>
       </div>
 
       <section className="product-section">
-        <p className="section-title">Rudra Tattva Online Collection</p>
+        <p className="section-title">Gems & Jewels Online Collection</p>
         <div className="product-grid">
           <div className="product-card">
             <img src={img || '/images/shared/logo.jpg'} alt={title} />

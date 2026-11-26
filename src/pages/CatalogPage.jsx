@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import CategoryListingPage from '../components/CategoryListingPage'
 import { loadCatalogPage, loadMoreProducts } from '../api/catalog'
+import { getRegularRedirect } from '../data/rudrakshaRegular'
+import { getGemstoneBuyRedirect } from '../data/gemstoneBuy'
 
 /** Live first-level category homes (c/*) matching rudraksha-ratna.com */
 const MAIN_CATEGORY_SLUGS = {
@@ -88,7 +90,7 @@ function useCatalog(slugValue, fallbackTitle) {
       .catch(err => {
         if (!active) return
         setError(err.message || 'Unable to load this page')
-        setDescription(`Explore authentic ${fallbackTitle} from Rudra Tattva.`)
+        setDescription(`Explore authentic ${fallbackTitle} from Gems & Jewels.`)
         setLoading(false)
       })
 
@@ -184,6 +186,14 @@ export default function CatalogPage({ prefix, slug: slugProp }) {
   const params = useParams()
   const rest = params['*'] || ''
   const slugValue = (slugProp || `${prefix}/${rest}`).replace(/\/$/, '')
+  const regular = getRegularRedirect(slugValue)
+  if (regular?.productSlug) {
+    return <Navigate to={`/${regular.productSlug}`} replace />
+  }
+  const gemBuy = getGemstoneBuyRedirect(slugValue)
+  if (gemBuy?.productSlug) {
+    return <Navigate to={`/${gemBuy.productSlug}`} replace />
+  }
   const fallbackTitle = titleFromSlug(slugValue)
   return <CatalogView key={slugValue} slugValue={slugValue} fallbackTitle={fallbackTitle} />
 }

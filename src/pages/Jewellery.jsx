@@ -15,7 +15,7 @@ export default function Jewellery() {
   return (
     <PageLayout
       title="Spiritual Jewellery"
-      description="Explore spiritual malas, bracelets, rings, lockets and chakra jewellery crafted with authentic Rudraksha beads, natural gemstones and sacred yantras at Rudra Tattva."
+      description="Explore spiritual malas, bracelets, rings, lockets and chakra jewellery crafted with authentic Rudraksha beads, natural gemstones and sacred yantras at Gems & Jewels."
     >
       {products.map(p => (
         <div className="product-card" key={p.name}>

@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { getRegularParentForProduct } from '../data/rudrakshaRegular'
+import { getGemstoneDisplayForProduct } from '../data/gemstoneBuy'
 
 const CartContext = createContext(null)
 const STORAGE_KEY = 'rudra-tattva-cart'
@@ -8,16 +10,27 @@ function toMoney(value) {
   return Number.isFinite(n) && n >= 0 ? n : 0
 }
 
+function localThumbForSlug(slug = '', fallback = '') {
+  const s = String(slug || '').replace(/^\//, '')
+  const rudra = getRegularParentForProduct(s)
+  if (rudra?.img?.startsWith('/image/')) return rudra.img
+  const gem = getGemstoneDisplayForProduct(s)
+  if (gem?.img?.startsWith('/image/')) return gem.img
+  if (String(fallback || '').startsWith('/image/')) return fallback
+  return fallback || '/images/gems-and-jewels-logo.png'
+}
+
 function normalizeItem(item) {
   if (!item || typeof item !== 'object') return null
   const quantity = Math.max(1, Number(item.quantity) || 1)
+  const slug = item.slug || ''
   return {
-    lineKey: String(item.lineKey || `${item.slug || 'item'}|${item.productId || 'p'}`),
+    lineKey: String(item.lineKey || `${slug || 'item'}|${item.productId || 'p'}`),
     productId: item.productId ?? null,
-    slug: item.slug || '',
+    slug,
     name: item.name || 'Product',
     code: item.code || '',
-    image: item.image || '/images/RudraTattvalogo.png',
+    image: localThumbForSlug(slug, item.image),
     unitPrice: toMoney(item.unitPrice),
     quantity,
     options: Array.isArray(item.options) ? item.options.filter(Boolean) : [],

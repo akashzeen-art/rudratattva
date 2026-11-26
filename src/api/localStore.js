@@ -4,6 +4,14 @@
  * Local dev: Vite proxies /api → Node server on :4000.
  */
 
+import {
+  filterCatalogChildren,
+  filterCatalogProducts,
+  FLATTEN_IDOL_TO_PRODUCTS_SLUGS,
+} from '../data/catalogFilters'
+import { mapRudrakshaSectionImages } from '../data/rudrakshaRegular'
+import { mapYantraSectionImages } from '../data/yantraImages'
+
 function safeSlug(slug = '') {
   return String(slug || '').replace(/^\//, '').replace(/[\\/]+/g, '__')
 }
@@ -71,20 +79,47 @@ async function fetchStaticPageBundle(slugValue = '', pageNo = 1, filters = {}) {
   })
   if (!res.ok) throw new Error('Page not found')
   const bundle = await res.json()
-  const all = applyFilters(bundle.page?.products || [], filters)
+  const mainprodtype = Number(bundle.page?.mainprodtype || bundle.category?.mainprodtype || 5)
+  let children = mapYantraSectionImages(
+    mapRudrakshaSectionImages(
+      filterCatalogChildren(
+        bundle.page?.children || bundle.category?.children || [],
+        slug,
+        mainprodtype
+      ),
+      slug,
+    ),
+    slug,
+  )
+  let products = filterCatalogProducts(bundle.page?.products || [], slug, mainprodtype)
+  // Brass Idols etc.: prefer pre-flattened products on the shard; hide sub-category cards.
+  if (FLATTEN_IDOL_TO_PRODUCTS_SLUGS.has(slug)) {
+    children = []
+    if (bundle.page) bundle.page.mode = 'products'
+  }
+  const all = applyFilters(products, filters)
   const size = 12
   const page = Math.max(1, Number(pageNo) || 1)
   const start = (page - 1) * size
   return {
     page: {
       ...bundle.page,
+      mode: FLATTEN_IDOL_TO_PRODUCTS_SLUGS.has(slug) ? 'products' : bundle.page?.mode,
+      children,
       products: all.slice(start, start + size),
       total: all.length,
       pageNo: page,
       pageSize: size,
       hasMore: start + size < all.length,
     },
-    category: bundle.category,
+    category: bundle.category
+      ? {
+          ...bundle.category,
+          children: FLATTEN_IDOL_TO_PRODUCTS_SLUGS.has(slug)
+            ? []
+            : filterCatalogChildren(bundle.category.children || [], slug, mainprodtype),
+        }
+      : null,
   }
 }
 

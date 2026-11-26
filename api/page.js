@@ -4,6 +4,8 @@
  * matching the local Node API.
  */
 
+import { filterCatalogChildren, filterCatalogProducts } from './_pujaFilters.js'
+
 function safeSlug(slug = '') {
   return String(slug).replace(/^\//, '').replace(/[\\/]+/g, '__')
 }
@@ -77,7 +79,11 @@ export default async function handler(req, res) {
       sortBy: req.query.sortBy || '',
     }
 
-    const all = applyFilters(bundle.page?.products || [], filters)
+    const mainprodtype = Number(bundle.page?.mainprodtype || bundle.category?.mainprodtype || 5)
+    let children = filterCatalogChildren(bundle.page?.children || [], slug, mainprodtype)
+    let products = filterCatalogProducts(bundle.page?.products || [], slug, mainprodtype)
+
+    const all = applyFilters(products, filters)
     const start = (pageNo - 1) * pageSize
     const slice = all.slice(start, start + pageSize)
 
@@ -86,13 +92,19 @@ export default async function handler(req, res) {
       data: {
         page: {
           ...bundle.page,
+          children,
           products: slice,
           total: all.length,
           pageNo,
           pageSize,
           hasMore: start + pageSize < all.length,
         },
-        category: bundle.category,
+        category: bundle.category
+          ? {
+              ...bundle.category,
+              children: filterCatalogChildren(bundle.category.children || [], slug, mainprodtype),
+            }
+          : null,
       },
     })
   } catch (err) {

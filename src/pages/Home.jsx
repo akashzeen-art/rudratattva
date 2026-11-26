@@ -4,23 +4,23 @@ import '../App.css'
 
 const banners = [
   {
-    src: '/images/hero1.png',
-    alt: 'Natural gemstones from Rudra Tattva',
+    src: '/image/gemstone/01-yellow-sapphire-stone.jpg',
+    alt: 'Natural gemstones from Gems & Jewels',
     title: 'Gemstones for every path',
     text: 'Fine natural, unheated and untreated stones chosen for clarity and energy.',
-    cta: { to: '/gemstones', label: 'Shop Gemstones' },
+    cta: { to: '/p/natural-jyotish-gemstones', label: 'Shop Gemstones' },
     focus: 'center',
   },
   {
-    src: '/images/hero2.png',
-    alt: 'Gandaki River Shaligram Shila',
-    title: 'Sacred Gandaki Shaligram',
-    text: 'Authentic Shila for puja, home and spiritual practice.',
+    src: '/image/idol/01-brass-idols.jpg',
+    alt: 'Sacred idols from Gems & Jewels',
+    title: 'Sacred idols for your altar',
+    text: 'Brass, bronze and silver idols chosen for home, puja and spiritual practice.',
     cta: { to: '/idols', label: 'Explore Collection' },
     focus: 'left',
   },
   {
-    src: '/images/hero3.png',
+    src: '/image/rudraksh/01-nepal-rudraksha.jpg',
     alt: 'Handpicked Rudraksha beads',
     title: 'Handpicked Rudraksha beads',
     text: 'Nepal and Indonesia beads, energized with care before they reach you.',
@@ -29,34 +29,64 @@ const banners = [
   },
 ]
 
-const mainCategories = [
-  { to: '/rudraksha', img: '/images/rudraksha/1-to-21-mukhi-nepal-rudraksha-category-thumbnail_206520.jpg', label: 'Rudraksha' },
-  { to: '/gemstones', img: '/images/gemstones/Gemstone-Category-thumbnail_227288.jpg', label: 'Gemstones' },
-  { to: '/yantra', img: '/images/yantra/Desktop-Yantras_219077.jpg', label: 'Yantras' },
-  { to: '/idols', img: '/images/idols/brass-new_110599.jpg', label: 'Idols' },
-  { to: '/pujas', img: '/images/pujas/1---Maha-Pujas_88533.jpg', label: 'Pujas' },
-  { to: '/consultation', img: '/images/home/consultations/astrology.jpg', label: 'Consultation' },
+const rudrakshaCollections = [
+  {
+    name: 'Nepal Rudraksha',
+    text: '1 to 21 Mukhi beads from Nepal',
+    img: '/image/rudraksh/01-nepal-rudraksha.jpg',
+    to: '/p/rudraksha-1-mukhi---21-mukhi',
+  },
+  {
+    name: 'Java Rudraksha',
+    text: 'Indonesian beads for daily wear',
+    img: '/image/rudraksh/02-java-indonesian-rudraksha.jpg',
+    to: '/p/rudraksha-1-mukhi-21-mukhi-java-indonesia',
+  },
+  {
+    name: 'Rudraksha Bracelets',
+    text: 'Mukhi bracelets ready to wear',
+    img: '/image/rudraksh/03-rudraksha-bracelets.jpg',
+    to: '/p/rudraksha-bracelets',
+  },
+  {
+    name: 'Malas & Kanthas',
+    text: 'Sacred malas for japa and blessing',
+    img: '/image/rudraksh/04-rudraksha-malas-kanthas.jpg',
+    to: '/p/rudraksha-kantha-rudraksha-mala',
+  },
 ]
 
-const specialProducts = [
-  { name: 'Collector Trijuti Nepal Rudraksha - XVII', price: 'INR 38,00,000', code: 'CT62', img: '/images/home/products/ct62.jpg', to: '/rudraksha' },
-  { name: 'Super Collector 22 Mukhi Nepal Rudraksha', price: 'INR 32,00,000', code: 'SCB22A', img: '/images/home/products/scb22a.jpg', to: '/rudraksha' },
-  { name: 'Natural Dakshinavarti Laxmi Shankh – 202 gms', price: 'INR 51,00,000', code: 'RHS31', img: '/images/home/products/rhs31.jpg', to: '/rudraksha' },
-  { name: 'Super Collector 21 Mukhi Nepal Rudraksha', price: 'Contact for Price', code: 'SCB21B', img: '/images/home/products/scb21b.jpg', to: '/rudraksha' },
-  { name: 'Yellow Sapphire - 11.49 Carats', price: 'INR 10,57,655', code: 'YS467', img: '/images/home/products/ys467.jpg', to: '/gemstones' },
-  { name: 'Sphatik Meru Shree Yantra - 1135 gms', price: 'INR 2,41,000', code: 'SSY59', img: '/images/home/products/ssy59.jpg', to: '/yantra' },
-]
-
-const mahapujas = [
-  { name: 'Kaal Bhairav Jayanti Mahapuja 1st Dec 2026', img: '/images/home/pujas/kaal-bhairav.jpg', to: '/p/maha-anushthan-pujas' },
-  { name: 'Mangalam Navagraha Shanti New Year Mahapuja 23 Dec', img: '/images/home/pujas/navagraha-newyear.jpg', to: '/p/maha-anushthan-pujas' },
-]
-
-const popularPujas = [
-  { name: 'Navagraha Shanti Puja Vidhanam and Homam', price: 'INR 9,501 - 74,501', img: '/images/home/pujas/navagraha.jpg', to: '/p/navgraha-dosh-nivaran-pujas' },
-  { name: 'Ann Daan (Food Donation)', price: 'INR 8,801 - 88,101', img: '/images/home/pujas/ann-daan.jpg', to: '/pujas' },
-  { name: 'Lakshmi Kuber Maha Anusthaan (9 Kunda Homa)', price: 'INR 2,51,000 - 8,15,000', img: '/images/home/pujas/lakshmi-kuber.jpg', to: '/p/maha-anushthan-pujas' },
-  { name: 'Maharudra Maha Anushtaan', price: 'INR 2,51,000', img: '/images/home/pujas/maharudra.jpg', to: '/p/maha-anushthan-pujas' },
+const featuredGemstones = [
+  {
+    name: 'Yellow Sapphire Stone',
+    img: '/image/gemstone/01-yellow-sapphire-stone.jpg',
+    to: '/buy/yellow-sapphire-pukhraj-3-22-carats',
+  },
+  {
+    name: 'Blue Sapphire Stone',
+    img: '/image/gemstone/02-blue-sapphire-stone.jpg',
+    to: '/buy/natural-blue-sapphire-1.01-carats',
+  },
+  {
+    name: 'Emerald Stone',
+    img: '/image/gemstone/04-emerald-stone.jpg',
+    to: '/buy/emerald-zambian-0-68-carats',
+  },
+  {
+    name: 'Ruby Stone',
+    img: '/image/gemstone/05-ruby-stone.jpg',
+    to: '/buy/indian-ruby-1-45-carats',
+  },
+  {
+    name: 'Gomed Stone',
+    img: '/image/gemstone/07-gomed-stone.jpg',
+    to: '/buy/indian-oval-gomed-3-to-4-carats',
+  },
+  {
+    name: 'Red Coral (Italy)',
+    img: '/image/gemstone/06-red-coral-italy.jpg',
+    to: '/buy/red-italian-coral-gemstone-3-05-carats',
+  },
 ]
 
 const HERO_MS = 6500
@@ -125,7 +155,7 @@ export default function Home() {
         </div>
 
         <div className="hero-content" key={slide}>
-          <p className="hero-brand">Rudra Tattva</p>
+          <p className="hero-brand">Gems & Jewels</p>
           <h1 className="hero-title">{current.title}</h1>
           <p className="hero-text">{current.text}</p>
           <div className="hero-actions">
@@ -175,7 +205,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="trust-strip" aria-label="Why Rudra Tattva">
+      <section className="trust-strip" aria-label="Why Gems & Jewels">
         <div className="trust-strip-inner">
           <p>Handpicked authenticity</p>
           <span aria-hidden="true" />
@@ -183,39 +213,55 @@ export default function Home() {
           <span aria-hidden="true" />
           <p>Panditji guidance</p>
           <span aria-hidden="true" />
-          <p>Secure WhatsApp checkout</p>
+          <p>Secure checkout</p>
         </div>
       </section>
 
       <section className="home-section reveal-section">
         <div className="home-container">
-          <h2 className="home-heading">Shop by Category</h2>
-          <div className="cat-row cat-row-main">
-            {mainCategories.map(c => (
-              <Link to={c.to} className="cat-card" key={c.to}>
-                <img src={c.img} alt={c.label} loading="lazy" />
-                <span>{c.label}</span>
+          <p className="home-sublabel">From our catalogue</p>
+          <h2 className="home-heading">Rudraksha Collections</h2>
+          <p className="home-lead">
+            Nepal beads, Java beads, bracelets and malas — chosen for purity and energised with care.
+          </p>
+          <div className="home-feature-grid">
+            {rudrakshaCollections.map((item) => (
+              <Link to={item.to} className="home-feature-card" key={item.to}>
+                <span className="home-feature-media">
+                  <img src={item.img} alt={item.name} loading="lazy" />
+                </span>
+                <span className="home-feature-copy">
+                  <strong>{item.name}</strong>
+                  <em>{item.text}</em>
+                </span>
               </Link>
             ))}
+          </div>
+          <div className="home-section-cta">
+            <Link to="/rudraksha" className="btn-primary">View all Rudraksha</Link>
           </div>
         </div>
       </section>
 
       <section className="home-section home-section-alt reveal-section">
         <div className="home-container">
-          <h2 className="home-heading">Explore Products</h2>
-          <p className="home-sublabel">Special Products</p>
-          <div className="special-grid">
-            {specialProducts.map(p => (
-              <Link to={p.to} className="special-card" key={p.code}>
-                <div className="special-img">
-                  <img src={p.img} alt={p.name} loading="lazy" />
-                </div>
-                <h3>{p.name}</h3>
-                <p className="special-price">{p.price}</p>
-                <p className="special-code">Product Code: {p.code}</p>
+          <p className="home-sublabel">Natural loose stones</p>
+          <h2 className="home-heading">Jyotish Gemstones</h2>
+          <p className="home-lead">
+            Planetary gemstones from our Natural Loose Gemstones collection — open price and add to cart directly.
+          </p>
+          <div className="home-gem-grid">
+            {featuredGemstones.map((item) => (
+              <Link to={item.to} className="home-gem-card" key={item.to}>
+                <span className="home-gem-media">
+                  <img src={item.img} alt={item.name} loading="lazy" />
+                </span>
+                <span className="home-gem-name">{item.name}</span>
               </Link>
             ))}
+          </div>
+          <div className="home-section-cta">
+            <Link to="/p/natural-jyotish-gemstones" className="btn-primary">View all Gemstones</Link>
           </div>
         </div>
       </section>
@@ -224,8 +270,8 @@ export default function Home() {
         <div className="pandit-banner">
           <div className="pandit-banner-media">
             <img
-              src="/images/home/consultations/astrology.jpg"
-              alt="Speak with Panditji at Rudra Tattva"
+              src="/image/pujas/Navgraha Puja and Dosh Nivaran Altar-1.png"
+              alt="Speak with Panditji at Gems & Jewels"
               loading="lazy"
             />
           </div>
@@ -234,43 +280,12 @@ export default function Home() {
             <h2>Speak with Panditji</h2>
             <p>
               Get personal Vedic guidance for Rudraksha, gemstones, pujas and life decisions from
-              experienced pandits — available online through Rudra Tattva.
+              experienced pandits — available online through Gems & Jewels.
             </p>
             <div className="pandit-banner-actions">
               <Link to="/consultation" className="btn-primary">Book Consultation</Link>
               <Link to="/contact-us" className="btn-outline">Contact Us</Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-section reveal-section">
-        <div className="home-container">
-          <h2 className="home-heading">Rudra Tattva Puja Services</h2>
-          <h3 className="home-subheading">Upcoming Mahapujas</h3>
-          <div className="puja-row">
-            {mahapujas.map(p => (
-              <Link to={p.to} className="puja-card" key={p.name}>
-                <img src={p.img} alt={p.name} loading="lazy" />
-                <div className="puja-card-body">
-                  <h4>{p.name}</h4>
-                  <span className="btn-sm">Book now</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <h3 className="home-subheading">Popular Individual Pujas</h3>
-          <div className="puja-grid">
-            {popularPujas.map(p => (
-              <Link to={p.to} className="puja-card" key={p.name}>
-                <img src={p.img} alt={p.name} loading="lazy" />
-                <div className="puja-card-body">
-                  <h4>{p.name}</h4>
-                  <p className="special-price">{p.price}</p>
-                  <span className="btn-sm">Book Now</span>
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
       </section>

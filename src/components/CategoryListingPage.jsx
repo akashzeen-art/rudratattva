@@ -100,16 +100,12 @@ export default function CategoryListingPage({
   const [openRange, setOpenRange] = useState(null)
   const [draftMinPrice, setDraftMinPrice] = useState('')
   const [draftMaxPrice, setDraftMaxPrice] = useState('')
-  const [draftBeadMin, setDraftBeadMin] = useState('')
-  const [draftBeadMax, setDraftBeadMax] = useState('')
   const filtersRef = useRef(null)
 
   useEffect(() => {
     setDraftMinPrice(filters.minPrice ?? '')
     setDraftMaxPrice(filters.maxPrice ?? '')
-    setDraftBeadMin(filters.beadMin ?? '')
-    setDraftBeadMax(filters.beadMax ?? '')
-  }, [filters.minPrice, filters.maxPrice, filters.beadMin, filters.beadMax])
+  }, [filters.minPrice, filters.maxPrice])
 
   useEffect(() => {
     const onDoc = (e) => {
@@ -122,6 +118,7 @@ export default function CategoryListingPage({
   const contentTabs = useMemo(
     () => (tabs || []).filter(t => {
       const heading = String(t.heading || '').trim()
+      if (/size\s*grade|bead\s*size|carat|dimension|ratti|size\s*guide/i.test(heading)) return false
       const text = String(t.html || '')
         .replace(/<[^>]+>/g, ' ')
         .replace(/&nbsp;/gi, ' ')
@@ -144,23 +141,13 @@ export default function CategoryListingPage({
     return items
   }, [contentTabs, faqs])
 
-  const sizeGrades = useMemo(() => {
-    if (filterMeta?.sizeGrades?.length) return filterMeta.sizeGrades
-    return [...new Set(products.map(p => p.grade).filter(Boolean))]
-  }, [filterMeta, products])
-
   const showPriceFilter = Boolean(filterMeta?.price)
-  const showBeadFilter = Boolean(filterMeta?.beadSize)
-  const showGradeFilter = sizeGrades.length > 0
-  const showFilters = Boolean(filterMeta) && (showPriceFilter || showBeadFilter || showGradeFilter)
+  const showFilterBar = products.length > 0 || showPriceFilter || Boolean(filterMeta)
 
   const sortedProducts = useMemo(() => {
     let list = [...products]
 
     // Client-side safety net (API ignores some filters, e.g. price-only)
-    if (filters.sizeGrade) {
-      list = list.filter(p => p.grade === filters.sizeGrade)
-    }
     if (filters.minPrice !== '' && filters.minPrice != null) {
       const min = Number(filters.minPrice)
       if (Number.isFinite(min)) list = list.filter(p => Number(p.price) >= min)
@@ -168,24 +155,6 @@ export default function CategoryListingPage({
     if (filters.maxPrice !== '' && filters.maxPrice != null) {
       const max = Number(filters.maxPrice)
       if (Number.isFinite(max)) list = list.filter(p => Number(p.price) <= max)
-    }
-    if (filters.beadMin !== '' && filters.beadMin != null) {
-      const min = Number(filters.beadMin)
-      if (Number.isFinite(min)) {
-        list = list.filter(p => {
-          const n = Number(String(p.beadSize).replace(/[^\d.]/g, ''))
-          return Number.isFinite(n) && n >= min
-        })
-      }
-    }
-    if (filters.beadMax !== '' && filters.beadMax != null) {
-      const max = Number(filters.beadMax)
-      if (Number.isFinite(max)) {
-        list = list.filter(p => {
-          const n = Number(String(p.beadSize).replace(/[^\d.]/g, ''))
-          return Number.isFinite(n) && n <= max
-        })
-      }
     }
 
     const sortBy = filters.sortBy || ''
@@ -195,8 +164,8 @@ export default function CategoryListingPage({
     return list
   }, [products, filters])
 
-  const showProducts = products.length > 0 || (showFilters && !loading)
-  const showChildren = childrenCards.length > 0 && products.length === 0 && !showFilters
+  const showProducts = products.length > 0 || (showFilterBar && !loading)
+  const showChildren = childrenCards.length > 0 && products.length === 0 && !showFilterBar
 
   const updateFilters = (patch) => {
     onFiltersChange?.({ ...filters, ...patch })
@@ -206,14 +175,6 @@ export default function CategoryListingPage({
     updateFilters({
       minPrice: draftMinPrice,
       maxPrice: draftMaxPrice,
-    })
-    setOpenRange(null)
-  }
-
-  const applyBead = () => {
-    updateFilters({
-      beadMin: draftBeadMin,
-      beadMax: draftBeadMax,
     })
     setOpenRange(null)
   }
@@ -341,81 +302,14 @@ export default function CategoryListingPage({
         <>
           <section className="rc-filters mt-4" ref={filtersRef}>
             <div className="rc-filters-container">
-              {showFilters && (
+              {showFilterBar && (
                 <div className="rc-filters-row">
-                  {showPriceFilter && (
-                    <RangeFilter
-                      label="Price"
-                      open={openRange === 'price'}
-                      onToggle={() => setOpenRange(openRange === 'price' ? null : 'price')}
-                      minBound={filterMeta.price.min}
-                      maxBound={filterMeta.price.max}
-                      minValue={draftMinPrice}
-                      maxValue={draftMaxPrice}
-                      onMinChange={setDraftMinPrice}
-                      onMaxChange={setDraftMaxPrice}
-                      onApply={applyPrice}
-                      onClear={() => {
-                        setDraftMinPrice('')
-                        setDraftMaxPrice('')
-                        updateFilters({ minPrice: '', maxPrice: '' })
-                        setOpenRange(null)
-                      }}
-                    />
-                  )}
-
-                  {showBeadFilter && (
-                    <RangeFilter
-                      label="Bead Size"
-                      open={openRange === 'bead'}
-                      onToggle={() => setOpenRange(openRange === 'bead' ? null : 'bead')}
-                      minBound={filterMeta.beadSize.min}
-                      maxBound={filterMeta.beadSize.max}
-                      minValue={draftBeadMin}
-                      maxValue={draftBeadMax}
-                      onMinChange={setDraftBeadMin}
-                      onMaxChange={setDraftBeadMax}
-                      onApply={applyBead}
-                      onClear={() => {
-                        setDraftBeadMin('')
-                        setDraftBeadMax('')
-                        updateFilters({ beadMin: '', beadMax: '' })
-                        setOpenRange(null)
-                      }}
-                      unit=" mm"
-                    />
-                  )}
-
-                  {showGradeFilter && (
-                    <div className="rc-filter-col">
-                      <div className="rc-ng-select-wrap">
-                        <div className="rc-ng-select-container">
-                          <div className="rc-ng-value-container">
-                            <div className="rc-ng-placeholder">{filters.sizeGrade || 'Size Grade'}</div>
-                          </div>
-                          <span className="rc-ng-arrow-wrapper"><span className="rc-ng-arrow" /></span>
-                        </div>
-                        <select
-                          className="rc-ng-select-native"
-                          value={filters.sizeGrade || ''}
-                          onChange={e => updateFilters({ sizeGrade: e.target.value })}
-                        >
-                          <option value="">Size Grade</option>
-                          {sizeGrades.map(g => <option key={g} value={g}>{g}</option>)}
-                        </select>
-                      </div>
-                    </div>
-                  )}
-
                   <div className="rc-filter-col">
                     <div className="rc-ng-select-wrap">
                       <div className="rc-ng-select-container">
                         <div className="rc-ng-value-container">
                           <div className="rc-ng-placeholder">
-                            {filters.sortBy === 'price-asc' ? 'Price: Low to High'
-                              : filters.sortBy === 'price-desc' ? 'Price: High to Low'
-                              : filters.sortBy === 'name-asc' ? 'Name: A to Z'
-                              : 'Sort By'}
+                            {filters.sortBy === 'name-asc' ? 'Name: A to Z' : 'Sort By'}
                           </div>
                         </div>
                         <span className="rc-ng-arrow-wrapper"><span className="rc-ng-arrow" /></span>
@@ -426,15 +320,13 @@ export default function CategoryListingPage({
                         onChange={e => updateFilters({ sortBy: e.target.value })}
                       >
                         <option value="">Sort By</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
                         <option value="name-asc">Name: A to Z</option>
                       </select>
                     </div>
                   </div>
                 </div>
               )}
-              <h2 className="rc-collection-heading">Rudra Tattva Online Collection</h2>
+              <h2 className="rc-collection-heading">Gems & Jewels Online Collection</h2>
             </div>
           </section>
 
@@ -467,12 +359,7 @@ export default function CategoryListingPage({
                       </button>
                       <ProductTag className="rc-product-name" {...linkProps}>{p.name}</ProductTag>
                       <div className="rc-product-details">
-                        {p.priceLabel
-                          ? <p className="rc-product-price">INR {p.priceLabel}</p>
-                          : p.price != null && <p className="rc-product-price">INR {Number(p.price).toLocaleString('en-IN')}</p>}
                         {p.sku && <p><span className="rc-param">Product Code: </span>{p.sku}</p>}
-                        {p.beadSize && <p><span className="rc-param">Bead Size: </span>{p.beadSize}{/\d$/.test(String(p.beadSize)) ? ' mm' : ''}</p>}
-                        {p.grade && <p><span className="rc-param">Size Grade: </span>{p.grade}</p>}
                       </div>
                     </div>
                   )
@@ -497,7 +384,7 @@ export default function CategoryListingPage({
 
       {showChildren && (
         <section className="rc-products">
-          <h2 className="rc-collection-heading">Rudra Tattva Online Collection</h2>
+          <h2 className="rc-collection-heading">Gems & Jewels Online Collection</h2>
           <div className="rc-products-grid">
             {childrenCards.map(c => (
               <Link to={c.to} className="rc-product" key={c.to}>
@@ -519,7 +406,7 @@ export default function CategoryListingPage({
 
       {!loading && !error && !showProducts && !showChildren && (
         <section className="rc-products">
-          <h2 className="rc-collection-heading">Rudra Tattva Online Collection</h2>
+          <h2 className="rc-collection-heading">Gems & Jewels Online Collection</h2>
           <div className="rc-products-grid">
             <div className="rc-product">
               <div className="rc-product-img-wrap">

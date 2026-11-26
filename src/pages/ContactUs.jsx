@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom'
 import '../App.css'
 
-const WHATSAPP = '918929728030'
-
 export default function ContactUs() {
   return (
     <div className="contact-page">
@@ -17,7 +15,7 @@ export default function ContactUs() {
             </nav>
             <h1 className="rc-page-title">Contact Us</h1>
             <p className="rc-page-desc">
-              Reach Rudra Tattva for product orders, puja services, and consultation enquiries.
+              Reach Gems & Jewels for product orders, puja services, and consultation enquiries.
             </p>
           </div>
         </div>
@@ -64,13 +62,8 @@ export default function ContactUs() {
           </div>
 
           <div className="contact-actions">
-            <a
-              className="pd-btn pd-btn-whatsapp"
-              href={`https://api.whatsapp.com/send?phone=${WHATSAPP}&text=${encodeURIComponent('Namaste. I would like to enquire with Rudra Tattva.')}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <i className="fab fa-whatsapp" /> WhatsApp Us
+            <a className="pd-btn pd-btn-solid" href="tel:+918929728030">
+              Click to call
             </a>
             <Link to="/consultation" className="pd-btn pd-btn-solid">
               Speak with Panditji

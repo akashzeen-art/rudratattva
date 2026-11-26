@@ -8,7 +8,7 @@ export default function Idols() {
   return (
     <PageLayout
       title="Gods & Goddesses Idols"
-      description="Discover the divine essence with our exquisite collection of Hindu God & Goddess Idols at Rudra Tattva. Crafted in Brass, Marble, Silver, Gemstones, Wood, Bronze, Ashtadhatu, and Clay Fiber Resin."
+      description="Discover the divine essence with our exquisite collection of Hindu God & Goddess Idols at Gems & Jewels. Crafted in Brass, Marble, Silver, Gemstones, Wood, Bronze, Ashtadhatu, and Clay Fiber Resin."
     >
       {products.map(p => (
         <Link to={p.to} className="product-card" key={p.to}>

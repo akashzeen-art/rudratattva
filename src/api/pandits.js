@@ -26,7 +26,7 @@ function mapPandit(item) {
     name: item.fullName || 'Panditji',
     title: item.title || 'Vedic Astrologer',
     specialty: item.specialty || '',
-    image: item.imageUrl || '/images/RudraTattvalogo.png',
+    image: item.imageUrl || '/images/gems-and-jewels-logo.png',
     languages: splitList(item.languages),
     sessionModes: modes,
     sessionFee: fee,

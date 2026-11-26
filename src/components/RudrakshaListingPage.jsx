@@ -6,13 +6,9 @@ const TABS = ['About', 'Benefits & Price', 'Who Should Wear', 'Identification & 
 export default function RudrakshaListingPage({ title, breadcrumb, description, products, keyFacts, faqs }) {
   const [activeTab, setActiveTab] = useState(null)
   const [openFaq, setOpenFaq] = useState(null)
-  const [sizeGrade, setSizeGrade] = useState('')
   const [sortBy, setSortBy] = useState('')
 
-  const grades = [...new Set(products.map(p => p.grade).filter(Boolean))]
-
   let filtered = [...products]
-  if (sizeGrade) filtered = filtered.filter(p => p.grade === sizeGrade)
   if (sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price)
   if (sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price)
   if (sortBy === 'name-asc') filtered.sort((a, b) => a.name.localeCompare(b.name))
@@ -58,7 +54,9 @@ export default function RudrakshaListingPage({ title, breadcrumb, description, p
           {keyFacts && (
             <table className="rc-facts-table">
               <tbody>
-                {keyFacts.map((f, i) => {
+                {keyFacts
+                  .filter((f) => !/bead\s*size|size\s*grade|carat|dimension|ratti/i.test(String(f)))
+                  .map((f, i) => {
                   const [label, value] = f.split(':')
                   return (
                     <tr key={i}>
@@ -129,53 +127,13 @@ export default function RudrakshaListingPage({ title, breadcrumb, description, p
           {/* Desktop filter row */}
           <div className="rc-filters-row">
             {/* Price */}
-            <div className="rc-filter-col">
-              <div className="rc-custom-filter">
-                <p className="rc-filter-label">Price</p>
-                <span className="rc-ng-arrow-wrapper"><span className="rc-ng-arrow"></span></span>
-              </div>
-            </div>
-
-            {/* Bead Size */}
-            <div className="rc-filter-col">
-              <div className="rc-custom-filter">
-                <p className="rc-filter-label">Bead Size</p>
-                <span className="rc-ng-arrow-wrapper"><span className="rc-ng-arrow"></span></span>
-              </div>
-            </div>
-
-            {/* Size Grade */}
-            <div className="rc-filter-col">
-              <div className="rc-ng-select-wrap">
-                <div className="rc-ng-select-container">
-                  <div className="rc-ng-value-container">
-                    <div className="rc-ng-placeholder">
-                      {sizeGrade || 'Size Grade'}
-                    </div>
-                  </div>
-                  <span className="rc-ng-arrow-wrapper"><span className="rc-ng-arrow"></span></span>
-                </div>
-                <select
-                  className="rc-ng-select-native"
-                  value={sizeGrade}
-                  onChange={e => setSizeGrade(e.target.value)}
-                >
-                  <option value="">Size Grade</option>
-                  {grades.map(g => <option key={g} value={g}>{g}</option>)}
-                </select>
-              </div>
-            </div>
-
             {/* Sort By */}
             <div className="rc-filter-col">
               <div className="rc-ng-select-wrap">
                 <div className="rc-ng-select-container">
                   <div className="rc-ng-value-container">
                     <div className="rc-ng-placeholder">
-                      {sortBy === 'price-asc' ? 'Price: Low to High'
-                        : sortBy === 'price-desc' ? 'Price: High to Low'
-                        : sortBy === 'name-asc' ? 'Name: A to Z'
-                        : 'Sort By'}
+                      {sortBy === 'name-asc' ? 'Name: A to Z' : 'Sort By'}
                     </div>
                   </div>
                   <span className="rc-ng-arrow-wrapper"><span className="rc-ng-arrow"></span></span>
@@ -186,15 +144,13 @@ export default function RudrakshaListingPage({ title, breadcrumb, description, p
                   onChange={e => setSortBy(e.target.value)}
                 >
                   <option value="">Sort By</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
                   <option value="name-asc">Name: A to Z</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <h2 className="rc-collection-heading">Rudra Tattva Online Collection</h2>
+          <h2 className="rc-collection-heading">Gems & Jewels Online Collection</h2>
         </div>
       </section>
 
@@ -218,10 +174,7 @@ export default function RudrakshaListingPage({ title, breadcrumb, description, p
               </button>
               <a className="rc-product-name" href="#">{p.name}</a>
               <div className="rc-product-details">
-                <p className="rc-product-price">INR {p.price.toLocaleString('en-IN')}</p>
                 {p.sku && <p><span className="rc-param">Product Code: </span>{p.sku}</p>}
-                {p.beadSize && <p><span className="rc-param">Bead Size: </span>{p.beadSize}</p>}
-                {p.grade && <p><span className="rc-param">Size Grade: </span>{p.grade}</p>}
               </div>
             </div>
           ))}

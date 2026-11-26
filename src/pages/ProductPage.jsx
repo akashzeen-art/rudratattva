@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { formatInr, loadProductPage } from '../api/product'
+import { Link, useParams } from 'react-router-dom'
+import { loadProductPage } from '../api/product'
 import { useCart } from '../context/CartContext'
+import BuyNowModal from '../components/BuyNowModal'
 
 function StarRating({ rating = 0 }) {
   const stars = []
@@ -13,16 +14,9 @@ function StarRating({ rating = 0 }) {
   return <div className="pd-stars" aria-label={`Rated ${rating} out of 5`}>{stars}</div>
 }
 
-function WearIcon({ type }) {
-  if (type === 'necklace') return <i className="fa-solid fa-gem" aria-hidden="true" />
-  if (type === 'bracelet') return <i className="fa-solid fa-circle-notch" aria-hidden="true" />
-  return <i className="fa-solid fa-circle" aria-hidden="true" />
-}
-
 export default function ProductPage() {
   const { '*': rest } = useParams()
   const slugValue = `buy/${rest || ''}`.replace(/\/$/, '')
-  const navigate = useNavigate()
   const { addItem } = useCart()
 
   const [state, setState] = useState({ loading: true, error: '', product: null })
@@ -32,12 +26,11 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1)
   const [energyId, setEnergyId] = useState(null)
   const [certId, setCertId] = useState(null)
-  const [wearId, setWearId] = useState('loose')
-  const [designId, setDesignId] = useState(null)
   const [variantId, setVariantId] = useState(null)
   const [bundleIds, setBundleIds] = useState([])
   const [lightbox, setLightbox] = useState(false)
   const [toast, setToast] = useState('')
+  const [buyNowOpen, setBuyNowOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -51,8 +44,6 @@ export default function ProductPage() {
         setQty(1)
         setEnergyId(product.energization[0]?.id ?? null)
         setCertId(product.certification[0]?.id ?? null)
-        setWearId(product.wearOptions[0]?.id || 'loose')
-        setDesignId(null)
         setVariantId(null)
         setBundleIds([])
       })
@@ -78,20 +69,6 @@ export default function ProductPage() {
     [product, certId]
   )
 
-  const wearDesigns = wearId === 'necklace'
-    ? (product?.necklaceDesigns || [])
-    : wearId === 'bracelet'
-      ? (product?.braceletDesigns || [])
-      : []
-
-  const variantDesigns = selectedVariant?.designs || []
-  const designs = variantDesigns.length
-    ? variantDesigns
-    : wearDesigns.length
-      ? wearDesigns
-      : (product?.topDesigns || [])
-
-  const design = designs.find(d => d.id === designId) || null
   const selectedBundles = useMemo(
     () => (product?.bundles || []).filter(b => bundleIds.includes(b.id)),
     [product, bundleIds]
@@ -100,18 +77,6 @@ export default function ProductPage() {
   const galleryImages = selectedVariant?.images?.length
     ? selectedVariant.images
     : (product?.images || [])
-
-  const displayPriceLabel = useMemo(() => {
-    if (!product) return ''
-    if (product.requiresVariant && !selectedVariant) return product.priceLabel
-    const base = selectedVariant ? Number(selectedVariant.price) : Number(product.price) || 0
-    const total = base
-      + Number(energy?.price || 0)
-      + Number(cert?.price || 0)
-      + Number(design?.price || 0)
-      + selectedBundles.reduce((sum, b) => sum + Number(b.price || 0), 0)
-    return formatInr(total)
-  }, [product, selectedVariant, energy, cert, design, selectedBundles])
 
   const unitPrice = useMemo(() => {
     if (!product) return 0
@@ -122,9 +87,8 @@ export default function ProductPage() {
     return safeBase
       + (Number(energy?.price) || 0)
       + (Number(cert?.price) || 0)
-      + (Number(design?.price) || 0)
       + selectedBundles.reduce((sum, b) => sum + (Number(b.price) || 0), 0)
-  }, [product, selectedVariant, energy, cert, design, selectedBundles])
+  }, [product, selectedVariant, energy, cert, selectedBundles])
 
   const thumbsVisible = 4
   const maxThumbStart = Math.max(0, galleryImages.length - thumbsVisible)
@@ -144,20 +108,14 @@ export default function ProductPage() {
     if (!product?.inStock) return false
     if (product.requiresVariant && !selectedVariant) return false
     if (selectedVariant && !selectedVariant.inStock) return false
-    if ((wearId === 'necklace' || wearId === 'bracelet') && wearDesigns.length && !designId) return false
-    if (variantDesigns.length && !designId) return false
-    if (!(unitPrice > 0)) return false
     return true
   }
 
   const buildCartItem = () => {
     const options = []
-    const wearLabel = product.wearOptions.find(w => w.id === wearId)?.label || wearId
     if (selectedVariant) options.push(`${product.variantTypeName}: ${selectedVariant.label}`)
     if (energy) options.push(`Energisation: ${energy.name}`)
     if (cert) options.push(`Certification: ${cert.name}`)
-    if (wearId !== 'loose' && product.wearOptions.length) options.push(`Wear: ${wearLabel}`)
-    if (design) options.push(`Design: ${design.name}`)
     selectedBundles.forEach(b => options.push(`Add-on: ${b.name}`))
 
     const price = Number(unitPrice)
@@ -167,15 +125,13 @@ export default function ProductPage() {
         variantId || selectedVariant?.id || 'v0',
         energyId || 'e0',
         certId || 'c0',
-        wearId,
-        designId || 'd0',
         [...bundleIds].sort().join('-') || 'b0',
       ].join('|'),
       productId: selectedVariant?.id || product.id,
       slug: product.slug,
       name: selectedVariant ? `${product.name} (${selectedVariant.label})` : product.name,
       code: product.code,
-      image: galleryImages[0]?.src || product.images[0]?.src || '/images/RudraTattvalogo.png',
+      image: galleryImages[0]?.src || product.images[0]?.src || '/images/gems-and-jewels-logo.png',
       unitPrice: Number.isFinite(price) ? price : 0,
       quantity: qty,
       options,
@@ -185,23 +141,21 @@ export default function ProductPage() {
   const handleAddToCart = () => {
     if (!canCheckout()) {
       if (product.requiresVariant && !selectedVariant) showToast(`Please select a ${product.variantTypeName}`)
-      else if (designs.length && !designId) showToast('Please select a design')
-      else if (!(unitPrice > 0)) showToast('Price unavailable for this selection')
       else showToast('Unable to add this product')
       return false
     }
-    const line = buildCartItem()
-    if (!(line.unitPrice > 0)) {
-      showToast('Price unavailable for this selection')
-      return false
-    }
-    addItem(line)
+    addItem(buildCartItem())
     showToast('Added to cart')
     return true
   }
 
   const handleBuyNow = () => {
-    if (handleAddToCart()) navigate('/cart')
+    if (!canCheckout()) {
+      if (product.requiresVariant && !selectedVariant) showToast(`Please select a ${product.variantTypeName}`)
+      else showToast('Unable to buy this product')
+      return
+    }
+    setBuyNowOpen(true)
   }
 
   const toggleBundle = (id) => {
@@ -210,7 +164,6 @@ export default function ProductPage() {
 
   const selectVariant = (id) => {
     setVariantId(id)
-    setDesignId(null)
   }
 
   if (state.loading) {
@@ -261,7 +214,7 @@ export default function ProductPage() {
               <img
                 src={currentImage?.src}
                 alt={currentImage?.alt || product.name}
-                onError={e => { e.target.src = '/images/RudraTattvalogo.png' }}
+                onError={e => { e.target.src = '/images/gems-and-jewels-logo.png' }}
               />
               <span className="pd-expand-hint">Click to expand</span>
             </button>
@@ -318,8 +271,6 @@ export default function ProductPage() {
               </button>
             </div>
 
-            <p className="pd-price">INR {displayPriceLabel}</p>
-
             {product.rating > 0 && (
               <div className="pd-rating-row">
                 <StarRating rating={product.rating} />
@@ -339,13 +290,6 @@ export default function ProductPage() {
             <div className="pd-details">
               {product.code && <p><span className="pd-prop">Product Code: </span>{product.code}</p>}
               {product.origin && <p><span className="pd-prop">Origin: </span>{product.origin}</p>}
-              {product.beadSize && !product.requiresVariant && (
-                <p><span className="pd-prop">Bead Size: </span>{product.beadSize}{/\d$/.test(String(product.beadSize)) ? ' mm' : ''}</p>
-              )}
-              {product.grade && <p><span className="pd-prop">Size Grade: </span>{product.grade}</p>}
-              {product.caratWeight && <p><span className="pd-prop">Carat Weight: </span>{product.caratWeight}</p>}
-              {product.rattiWeight && <p><span className="pd-prop">Ratti Weight: </span>{product.rattiWeight}</p>}
-              {product.pricePerCarat && <p><span className="pd-prop">Price / Carat: </span>{product.pricePerCarat}</p>}
             </div>
 
             {product.variants.length > 0 && (
@@ -378,12 +322,31 @@ export default function ProductPage() {
                       onClick={() => setEnergyId(opt.id)}
                     >
                       {opt.name}
-                      {opt.price > 0 && <span>+ INR {formatInr(opt.price)}</span>}
                     </button>
                   ))}
                 </div>
               </div>
             )}
+
+            {product.bundles.map(bundle => (
+              <div className="pd-block" key={bundle.id}>
+                <p className="pd-selection-heading">Add: {bundle.name}</p>
+                <button
+                  type="button"
+                  className={`pd-bundle${bundle.image ? '' : ' pd-bundle--no-img'}${bundleIds.includes(bundle.id) ? ' active' : ''}`}
+                  onClick={() => toggleBundle(bundle.id)}
+                >
+                  <span className="pd-wear-marker" />
+                  {bundle.image ? (
+                    <img src={bundle.image} alt={bundle.name} loading="lazy" />
+                  ) : null}
+                  <div>
+                    <p className="pd-design-name">{bundle.name}</p>
+                    {bundle.description && <p className="pd-bundle-desc">{bundle.description}</p>}
+                  </div>
+                </button>
+              </div>
+            ))}
 
             {product.certification.length > 0 && (
               <div className="pd-block">
@@ -397,78 +360,11 @@ export default function ProductPage() {
                       onClick={() => setCertId(opt.id)}
                     >
                       {opt.name}
-                      {opt.price > 0 && <span>+ INR {formatInr(opt.price)}</span>}
                     </button>
                   ))}
                 </div>
               </div>
             )}
-
-            {product.wearOptions.length > 1 && (
-              <div className="pd-block">
-                <p className="pd-selection-heading">Select Ring / Pendant / Bracelet</p>
-                <div className="pd-wear-row">
-                  {product.wearOptions.map(opt => (
-                    <button
-                      type="button"
-                      key={opt.id}
-                      className={`pd-wear${wearId === opt.id ? ' active' : ''}`}
-                      onClick={() => {
-                        setWearId(opt.id)
-                        setDesignId(null)
-                      }}
-                    >
-                      <span className="pd-wear-marker" />
-                      <WearIcon type={opt.id} />
-                      <p>{opt.label}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {designs.length > 0 && (
-              <div className="pd-block">
-                <p className="pd-selection-heading">Select Design</p>
-                <div className="pd-design-grid">
-                  {designs.map(opt => (
-                    <button
-                      type="button"
-                      key={opt.id}
-                      className={`pd-design${designId === opt.id ? ' active' : ''}`}
-                      onClick={() => setDesignId(opt.id)}
-                    >
-                      <span className="pd-wear-marker" />
-                      <img src={opt.image} alt={opt.name} loading="lazy" />
-                      <div>
-                        <p className="pd-design-name">{opt.name}</p>
-                        <p className="pd-design-price">+ INR {formatInr(opt.price)}</p>
-                        {opt.description && <p className="pd-bundle-desc">{opt.description}</p>}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {product.bundles.map(bundle => (
-              <div className="pd-block" key={bundle.id}>
-                <p className="pd-selection-heading">Add: {bundle.name}</p>
-                <button
-                  type="button"
-                  className={`pd-bundle${bundleIds.includes(bundle.id) ? ' active' : ''}`}
-                  onClick={() => toggleBundle(bundle.id)}
-                >
-                  <span className="pd-wear-marker" />
-                  <img src={bundle.image} alt={bundle.name} loading="lazy" />
-                  <div>
-                    <p className="pd-design-name">{bundle.name}</p>
-                    <p className="pd-design-price">+ INR {formatInr(bundle.price)}</p>
-                    {bundle.description && <p className="pd-bundle-desc">{bundle.description}</p>}
-                  </div>
-                </button>
-              </div>
-            ))}
 
             {needsVariation ? (
               <div className="pd-actions pd-actions-center">
@@ -518,19 +414,11 @@ export default function ProductPage() {
 
             <div className="pd-consult">
               <h3>Seeking Rudraksha Recommendation?</h3>
-              <p>Speak with our Panditji for expert Vedic guidance from Rudra Tattva</p>
+              <p>Speak with our Panditji for expert Vedic guidance from Gems & Jewels</p>
               <div className="pd-consult-btns">
                 <Link to="/consultation" className="pd-btn pd-btn-solid">
-                  Book Consultation
+                  Talk to panditji
                 </Link>
-                <a
-                  className="pd-btn pd-btn-whatsapp"
-                  href={`https://api.whatsapp.com/send?phone=918929728030&text=${encodeURIComponent(`Namaste. I want a recommendation for ${product.name} (${product.slug}).`)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-whatsapp" /> WhatsApp Us
-                </a>
               </div>
               <p className="pd-consult-note">Chakra &amp; Horoscope Analysis included in Paid Consultation</p>
             </div>
@@ -559,6 +447,12 @@ export default function ProductPage() {
       )}
 
       {toast && <div className="pd-toast" role="status">{toast}</div>}
+
+      <BuyNowModal
+        open={buyNowOpen}
+        productName={product.name}
+        onClose={() => setBuyNowOpen(false)}
+      />
     </div>
   )
 }
